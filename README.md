@@ -6,7 +6,7 @@ Infrastructure consists of multiple layers (autoscaling_3, autoscaling_2, alb_2,
 
 [Terragrunt](https://github.com/gruntwork-io/terragrunt) is used to work with Terraform configurations which allows to orchestrate dependent layers, update arguments dynamically and keep configurations [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself).
 
-![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/reactmagento2/Magento2Cloud.png)
+![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)
 
 ## Pre-requirements
 
