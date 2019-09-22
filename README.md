@@ -70,6 +70,7 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 
 # Approximate Magento 2 AWS Cloud infrastructure Cost
 
+```
 +-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
 | Category    | Type                | Region    | Total cost | Count | Unit price | Instance type | Instance size |
 +-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
@@ -97,6 +98,6 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 +-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
 |             |                     | Total     | $269.55    |       |            |               |               |
 +-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-
+```
 
 
