@@ -99,5 +99,77 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 |             |                     | Total     | $269.55    |       |            |               |               |
 +-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
 ```
+# Basic Deployment With CodeDeploy Example 
+
+ASSUMING YOU ALREADY HAVE an AWS account and CodeDeploy setup
+
+Here are the basic that we take on a deployment for M2 
+
+Here is the appspec.yml file (https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file.html#appspec-reference-ecs)
+```
+version: 0.0
+os: linux
+hooks:
+    BeforeInstall:
+        - location: config_files/scripts/beforeInstall.bash
+          runas: root
+    AfterInstall:
+        - location: config_files/scripts/afterInstall.bash
+          runas: mage_user
+        - location: config_files/scripts/moveToProduction.bash
+          runas: root
+        - location: config_files/scripts/cacheclean.bash
+          runas: mage_user
+```
+
+Script to 'compile' magento on Deploy server - You pull and compile code to a deploy server end after just push code to production fith Code Deploy - fastest way 
+
+```
+cd production/build/public_html
+git checkout .
+git pull origin master
+rm -rf var/cache/* var/page_cache/* var/composer_home/* var/tmp/*
+php composer.phar update --no-interaction --no-progress --optimize-autoloader
+bin/magento setup:upgrade
+bin/magento setup:static-content:deploy -t Magento/backend
+bin/magento setup:static-content:deploy en_US es_ES -a frontend
+bin/magento setup:di:compile
+# Make code files and directories read-only
+echo "Setting directory base permissions to 0750"
+find . -type d -exec chmod 0750 {} \;
+echo "Setting file base permissions to 0640"
+find . -type f -exec chmod 0640 {} \;
+chmod o-rwx app/etc/env.php && chmod u+x bin/magento
+
+# Compress source at shared directory
+if [ ! -d /build ]; then
+    mkdir -p /build
+fi
+tar -czvf /build/build.tar.gz . --exclude='./pub/media' --exclude='./.htaccess' --exclude='./.git' --exclude='./var/cache' --exclude='./var/composer_home' --exclude='./var/log' --exclude='./var/page_cache' --exclude='./var/import' --exclude='./var/export' --exclude='./var/report' --exclude='./var/backups' --exclude='./var/tmp' --exclude='./var/resource_config.json' --exclude='./var/.sample-data-state.flag' --exclude='./app/etc/config.php' --exclude='./app/etc/env.php'
+```
+Now you can deploy to your pre-configured group
+
+```
+sh ./compile.sh
+aws deploy create-deployment \
+--application-name AppMagento2 \
+--deployment-config-name CodeDeployDefault.OneAtATime \
+--deployment-group-name MyMagentoApp \
+--description "Live Deployment" \
+--s3-location bucket=mage-codedeploy,bundleType=zip,eTag=<tagname>,key=live-build2.zip
+```
+
+Create this script to show where you are in the deployment
+
+show-deployment.sh
+
+```
+aws deploy get-deployment --deployment-id $1 --query "deploymentInfo.[status, creator]" --output text
+```
+
+File 'config_files/scripts/afterInstall.bash' should run setup:upgrade --keep-generated, nginx, php-fpm restart and similar stuf 
+
+Source (https://magento.stackexchange.com/questions/224198/magento-2-aws-automatic-codedeploy-via-github-webhook)
+
 
 
