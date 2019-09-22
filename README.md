@@ -57,12 +57,12 @@ First, you should run `chmod +x common/scripts/update_dynamic_values_in_tfvars.s
 
 Once all arguments are set, run this command to create infrastructure in all layers in a single region:
 
-    $ cd us-west-1
+    $ cd production
     $ terragrunt apply-all
 
 Alternatively, you can create infrastructure in a single layer (eg, `autoscaling_3`):
 
-    $ cd us-west-1/autoscaling_3
+    $ cd production/autoscaling_3
     $ terragrunt apply
 
 See [official Terragrunt documentation](https://github.com/gruntwork-io/terragrunt/blob/master/README.md) for all available commands and features.
