@@ -16,7 +16,7 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * Aplication Load Ballancer SSL termination 
 * Scaled Varnish group
 * Dedicated Admin/Cron ASG
-* You can easly add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API)  
+* You can easley add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API), just copy paste code  
 * Possibility to run the same infrastructure on Production/Staging/Dev environment, differnt projects
 * Automatic CI/CD (CodePipeline/CodeDeploy) deployments possible
 
