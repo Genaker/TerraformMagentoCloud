@@ -122,7 +122,7 @@ hooks:
           runas: mage_user
 ```
 
-Script to 'compile' magento on Deploy server - You pull and compile code to a deploy server end after just push code to production fith Code Deploy - fastest way 
+Script to 'compile' magento on Deploy server - You pull and compile code to a deploy server or build Docker container end after just push code to production fith Code Deploy - fastest way 
 
 ```
 cd production/build/public_html
