@@ -103,6 +103,8 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 ```
 # Basic Deployment With CodeDeploy Example 
 
+##Code and apliccation deployment is beyond the scope of this repo. This repo for infrastructure provisioning only
+
 ASSUMING YOU ALREADY HAVE an AWS account and CodeDeploy setup
 
 Here are the basic that we take on a deployment for M2 
