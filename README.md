@@ -172,4 +172,5 @@ File 'config_files/scripts/afterInstall.bash' should run setup:upgrade --keep-ge
 Source (https://magento.stackexchange.com/questions/224198/magento-2-aws-automatic-codedeploy-via-github-webhook)
 
 
+If you have any questions feel free send me an email  – yegorshytikov@gmail.com	
 
