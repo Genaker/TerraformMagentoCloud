@@ -21,6 +21,9 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * You can easley add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API), just copy paste code  
 * Possibility to run the same infrastructure on Production/Staging/Dev environment, differnt projects
 * Automatic CI/CD (CodePipeline/CodeDeploy) deployments possible
+* Amazon Simple Email Service (Amazon SES) - cloud-based email sending service. Awsaome price $0.10 for 1K emails 
+* Amazon CloudWatch - load all the metrics (CPU, RAM, Network) in your account for search, graphing, and alarms. Metric data is kept for 15 months.
+* CloudWatch alarms that watches a single CloudWatch metric or the result of a math expression based on CloudWatch metrics and send SMS(Text) Notifications or Emails
 
 ![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)
 
