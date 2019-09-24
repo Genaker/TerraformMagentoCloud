@@ -6,16 +6,16 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * True Horizontal Auto Scaling 
 * Affordabie(starting from ~300$ for us-west-2 region)
 * MySQL RDS scalable Managed by Amazon, multi az failover
-* EFS - Fully managed elastic NFS for media and configuration sharing
-* CloudFront CDN
+* EFS - Fully managed elastic NFS for media and configuration storage
+* CloudFront CDN for static and media served from different origins S3 or Magento(EFS) as second origin 
 * Automatically back (point-in-time snapshot) up your code and databases for easy restoration.
 * 99.9 Uptime, multi az high avalability 
 * Hihg security (Security groups, private infrastructure)
-* PCI compliant  infrastructure
+* PCI compliant infrastructure
 * Redis cluster
 * Amazon Elasticsearch Service - service that makes it easy for you to deploy, secure, and operate Elasticsearch at scale with zero down time
 * Different apllication scaling groups (ASG)
-* Aplication Load Ballancer SSL termination 
+* Aplication Load Ballancer(ALB) SSL termination 
 * Scaled Varnish group
 * Dedicated Admin/Cron ASG
 * You can easley add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API), just copy paste code  
@@ -25,6 +25,7 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * Amazon CloudWatch - load all the metrics (CPU, RAM, Network) in your account for search, graphing, and alarms. Metric data is kept for 15 months.
 * CloudWatch alarms that watches a single CloudWatch metric or the result of a math expression based on CloudWatch metrics and send SMS(Text) Notifications or Emails
 * Simple and Step Scaling Policies - choose scaling metrics that trigger horisontal scaling.
+* Manual Scaling for Magento Auto Scaling Group (ASG)
 * AWS Command Line Interface (CLI) - tool to manage your AWS services. You can control multiple AWS services from the command line and automate them through scripts.
 
 
