@@ -24,6 +24,9 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * Amazon Simple Email Service (Amazon SES) - cloud-based email sending service. Awsaome price $0.10 for 1K emails 
 * Amazon CloudWatch - load all the metrics (CPU, RAM, Network) in your account for search, graphing, and alarms. Metric data is kept for 15 months.
 * CloudWatch alarms that watches a single CloudWatch metric or the result of a math expression based on CloudWatch metrics and send SMS(Text) Notifications or Emails
+* Simple and Step Scaling Policies - choose scaling metrics that trigger horisontal scaling.
+* AWS Command Line Interface (CLI) - tool to manage your AWS services. You can control multiple AWS services from the command line and automate them through scripts.
+
 
 ![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)
 
