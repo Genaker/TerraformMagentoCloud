@@ -11,6 +11,7 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * Automatically back (point-in-time snapshot) up your code and databases for easy restoration.
 * 99.9 Uptime, multi az high avalability 
 * Hihg security (Security groups, private infrastructure)
+* Private Public Subnets - NAT gateway, Bastion server
 * PCI compliant infrastructure
 * Redis cluster
 * Amazon Elasticsearch Service - service that makes it easy for you to deploy, secure, and operate Elasticsearch at scale with zero down time
@@ -27,6 +28,7 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * Simple and Step Scaling Policies - choose scaling metrics that trigger horisontal scaling.
 * Manual Scaling for Magento Auto Scaling Group (ASG)
 * AWS Command Line Interface (CLI) - tool to manage your AWS services. You can control multiple AWS services from the command line and automate them through scripts.
+* DynamoDb for logs, indexes, analytics
 
 
 ![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)
