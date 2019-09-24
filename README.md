@@ -12,6 +12,9 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * 99.9 Uptime, multi az high avalability 
 * Hihg security (Security groups, private infrastructure)
 * Private Public Subnets - NAT gateway, Bastion server
+* All servers and Database are hosted in private Network securely
+* System and Software Update Patches
+* DDoS Protection with AWS Shield
 * PCI compliant infrastructure
 * Redis cluster
 * Amazon Elasticsearch Service - service that makes it easy for you to deploy, secure, and operate Elasticsearch at scale with zero down time
