@@ -110,6 +110,32 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 |             |                     | Total     | $269.55    |       |            |               |               |
 +-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
 ```
+
+# Why not Magento Cloud?
+
++-----------------------------------------+-------------------------------------------+
+|              Magento Cloud              |               This Solution               |
++-----------------------------------------+-------------------------------------------+
+| Manual scaling, requires prior notice,  | Unlimited Resource, scaling by rule,      |
+| vertical scaling,                       | no performance degradation                |
+| performance degradation during scaling  |                                           |
++-----------------------------------------+-------------------------------------------+
+| Fastly CDN only                         | Completely CDN agnostic,                  |
+|                                         |  works with Cloudflare, CloudFront        |
++-----------------------------------------+-------------------------------------------+
+| Works only with Enterprice version M2   | Works with any version of Magento 1/2     |
++-----------------------------------------+-------------------------------------------+
+| Expansive $2000-$10000 month +          | Paying only for AWS resources you used,   |
+| Enterprice license                      | starting from 300$ months                 |
++-----------------------------------------+-------------------------------------------+
+| Not Customizable                        | Fully Customizeble                        |
++-----------------------------------------+-------------------------------------------+
+| Host only single Magento 2 CE           | Can host multiple project, web sites,     |
+| installation                            | tech stacks, PHP, Node.JS, Python, Java;  |
+|                                         | Magento 1/2, WordPres, Drupal, Joomla,    |
+|                                         | Presta Shop, Open Cart, Laravel, Django   |
++-----------------------------------------+-------------------------------------------+
+
 # Basic Deployment With CodeDeploy Example 
 
 ## Code and apliccation deployment is beyond the scope of this repo. This repo for infrastructure provisioning only
