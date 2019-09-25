@@ -2,6 +2,8 @@
 
 This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for AWS Public Cloud
 
+This Infrastructure is the result of years of experience scaling Magento 1 and 2 in the cloud. It comes with the best practises baked right in saving your business time and money and customers.
+
 ## AWS Magento 2 Cloud Features:
 * True Horizontal Auto Scaling 
 * Affordabie(starting from ~300$ for us-west-2 region)
