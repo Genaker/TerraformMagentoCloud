@@ -9,7 +9,8 @@ Leverage your own AWS Account drammatically reduce your monthly spend instead of
 ## AWS Magento 2 Cloud Features:
 * True Horizontal Auto Scaling 
 * Affordabie(starting from ~300$ for us-west-2 region)
-* MySQL RDS scalable Managed by Amazon, multi az failover
+* MySQL RDS scalable Managed by Amazon, multi az failover, vertical scaling without downtime
+* Compatible with RDS Aurora Cluster and Aurora Serverless
 * EFS - Fully managed elastic NFS for media and configuration storage
 * CloudFront CDN for static and media served from different origins S3 or Magento(EFS) as second origin 
 * Automatically back (point-in-time snapshot) up your code and databases for easy restoration.
