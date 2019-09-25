@@ -156,7 +156,7 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 
 # Basic Deployment With CodeDeploy Example 
 
-## Code and apliccation deployment is beyond the scope of this repo. This repo for infrastructure provisioning only
+## Code and application deployment is beyond the scope of this repo. This repo for infrastructure provisioning only
 
 AWS CodeDeploy is a managed deployment technology. It provides great features like rolling deployments, automatic rollback, and load balancer integration. It is technology agnostic and Amazon uses it to deploy everything. 
 
@@ -181,7 +181,7 @@ hooks:
           runas: mage_user
 ```
 
-Script to 'compile' magento on Deploy server - You pull and compile code to a deploy server or build Docker container end after just push code to production fith Code Deploy - fastest way 
+Script to 'compile' magento on Deploy server - You pull and compile code to deploy server or build Docker container end after just push code to production using Code Deploy - fastest way 
 
 ```
 cd production/build/public_html
@@ -226,7 +226,7 @@ show-deployment.sh
 aws deploy get-deployment --deployment-id $1 --query "deploymentInfo.[status, creator]" --output text
 ```
 
-File 'config_files/scripts/afterInstall.bash' should run setup:upgrade --keep-generated, nginx, php-fpm restart and similar stuf 
+File 'config_files/scripts/afterInstall.bash' should run setup:upgrade --keep-generated, nginx, php-fpm restart and similar stuff
 
 Source (https://magento.stackexchange.com/questions/224198/magento-2-aws-automatic-codedeploy-via-github-webhook)
 
@@ -239,5 +239,5 @@ docker pull [OPTIONS] MAGENTO_IMAGE_NAME[:TAG|@DIGEST]
 
 ```
 
-If you have any questions feel free send me an email  – yegorshytikov@gmail.com	
+If you have any questions feel free to send me an email  – yegorshytikov@gmail.com	
 
