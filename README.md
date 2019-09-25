@@ -18,9 +18,10 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * PCI compliant infrastructure
 * Redis cluster
 * Amazon Elasticsearch Service - service that makes it easy for you to deploy, secure, and operate Elasticsearch at scale with zero down time
-* Different apllication scaling groups (ASG)
-* Aplication Load Ballancer(ALB) SSL termination 
-* Scaled Varnish group
+* Different Apllication Scaling Groups (ASG)
+* Aplication Load Ballancer(ALB) with SSL/TSL termination, SSL certificates managment
+* ALB Path-Based Routing, Host-Based Routing, Lambda functions as targets, HTTP header/method-based routing, Query string parameter-based routing 		
+* Scaled Varnish ASG
 * Dedicated Admin/Cron ASG
 * You can easley add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API), just copy paste code  
 * Possibility to run the same infrastructure on Production/Staging/Dev environment, differnt projects
