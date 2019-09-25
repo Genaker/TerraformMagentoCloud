@@ -1,21 +1,21 @@
-# Infrastructure as a code for Magento 2 Cloud Archetecture on AWS
+# Infrastructure as a code for Magento 2 Cloud Architecture on AWS
 
-This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for AWS Public Cloud
+This repository contains Magento 2 Cloud Terraform infrastructure as a code for AWS Public Cloud
 
 This Infrastructure is the result of years of experience scaling Magento 1 and 2 in the cloud. It comes with the best practises baked right in saving your business time and money and customers.
 
-Leverage your own AWS Account drammatically reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
+Leverage your own AWS Account dramatically reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
 
 ## AWS Magento 2 Cloud Features:
 * True Horizontal Auto Scaling 
-* Affordabie(starting from ~300$ for us-west-2 region)
+* Affordable(starting from ~300$ for us-west-2 region)
 * MySQL RDS scalable Managed by Amazon, multi az failover, vertical scaling without downtime
 * Compatible with RDS Aurora Cluster and Aurora Serverless
 * EFS - Fully managed elastic NFS for media and configuration storage
 * CloudFront CDN for static and media served from different origins S3 or Magento(EFS) as second origin 
 * Automatically back (point-in-time snapshot) up your code and databases for easy restoration.
-* 99.9 Uptime, multi az high avalability 
-* Hihg security (Security groups, private infrastructure)
+* 99.9 Uptime, multi az high availability 
+* High security (Security groups, private infrastructure)
 * Private Public Subnets - NAT gateway, Bastion server
 * All servers and Database are hosted in private Network securely
 * System and Software Update Patches
@@ -23,26 +23,26 @@ Leverage your own AWS Account drammatically reduce your monthly spend instead of
 * PCI compliant infrastructure
 * Redis cluster
 * Amazon Elasticsearch Service - Elasticsearch at scale with zero down time with built-in Kibana
-* Different Apllication Scaling Groups (ASG)
-* Aplication Load Ballancer(ALB) with SSL/TSL termination, SSL certificates managment
+* Different Application Scaling Groups (ASG)
+* Application Load Balancer(ALB) with SSL/TSL termination, SSL certificates management
 * ALB Path-Based Routing, Host-Based Routing, Lambda functions as targets, HTTP header/method-based routing, Query string parameter-based routing 		
 * Scaled Varnish ASG
 * Dedicated Admin/Cron ASG
-* You can easley add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API), just copy paste code  
-* Possibility to run the same infrastructure on Production/Staging/Dev environment, differnt projects
+* You can easily add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API), just copy paste code  
+* Possibility to run the same infrastructure on Production/Staging/Dev environment, different projects
 * Automatic CI/CD (CodePipeline/CodeDeploy) deployments possible
 * AWS CodeDeploy In-place deployment, Blue/green deployment form Git or S3, Redeploy or Roll Back
 * Deploying from a Development Account to a Production Account
-* Amazon Simple Email Service (Amazon SES) - cloud-based email sending service. Awsaome price $0.10 for 1K emails 
+* Amazon Simple Email Service (Amazon SES) - cloud-based email sending service. Price $0.10 for 1K emails 
 * Amazon CloudWatch - load all the metrics (CPU, RAM, Network) in your account for search, graphing, and alarms. Metric data is kept for 15 months.
 * CloudWatch alarms that watches a single CloudWatch metric or the result of a math expression based on CloudWatch metrics and send SMS(Text) Notifications or Emails
-* Simple and Step Scaling Policies - choose scaling metrics that trigger horisontal scaling.
+* Simple and Step Scaling Policies - choose scaling metrics that trigger horizontal scaling.
 * Manual Scaling for Magento Auto Scaling Group (ASG)
 * AWS Command Line Interface (CLI) - tool to manage your AWS services. You can control multiple AWS services from the command line and automate them through scripts.
 * DynamoDb for logs, indexes, analytics
-* Lambda funtions as targets for a load balancer
+* Lambda functions as targets for a load balancer
 * Elastic Container Registry (ECR) - fully-managed Docker container registry that makes it easy to store, manage, and deploy Docker container images!
-* You can use Amazon Elastic Container Service (ECS) istead of ASG with Service Auto Scaling to adjust running containers desired count automatically.
+* You can use Amazon Elastic Container Service (ECS) instead of ASG with Service Auto Scaling to adjust running containers desired count automatically.
 * Awesome AWS documentation is Open Source and on GitHub
 
 
