@@ -16,6 +16,9 @@ Leverage your own AWS Account dramatically reduce your monthly spend instead of 
 * Automatically back (point-in-time snapshot) up your code and databases for easy restoration.
 * 99.9 Uptime, multi az high availability 
 * High security (Security groups, private infrastructure)
+* Network Address Translation (NAT) has Elastic(Static) IP and used for internet access for all EC2 instances.
+* Bastion host to provide Secure Shell (SSH) access to the Magento web servers. 
+* Appropriate security groups for each instance or function to restrict access to only necessary protocols and ports.
 * Private Public Subnets - NAT gateway, Bastion server
 * All servers and Database are hosted in private Network securely
 * System and Software Update Patches
