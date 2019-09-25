@@ -17,7 +17,7 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * DDoS Protection with AWS Shield
 * PCI compliant infrastructure
 * Redis cluster
-* Amazon Elasticsearch Service - service that makes it easy for you to deploy, secure, and operate Elasticsearch at scale with zero down time
+* Amazon Elasticsearch Service - Elasticsearch at scale with zero down time with built-in Kibana
 * Different Apllication Scaling Groups (ASG)
 * Aplication Load Ballancer(ALB) with SSL/TSL termination, SSL certificates managment
 * ALB Path-Based Routing, Host-Based Routing, Lambda functions as targets, HTTP header/method-based routing, Query string parameter-based routing 		
@@ -26,6 +26,8 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * You can easley add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API), just copy paste code  
 * Possibility to run the same infrastructure on Production/Staging/Dev environment, differnt projects
 * Automatic CI/CD (CodePipeline/CodeDeploy) deployments possible
+* AWS CodeDeploy In-place deployment, Blue/green deployment form Git or S3, Redeploy or Roll Back
+* Deploying from a Development Account to a Production Account
 * Amazon Simple Email Service (Amazon SES) - cloud-based email sending service. Awsaome price $0.10 for 1K emails 
 * Amazon CloudWatch - load all the metrics (CPU, RAM, Network) in your account for search, graphing, and alarms. Metric data is kept for 15 months.
 * CloudWatch alarms that watches a single CloudWatch metric or the result of a math expression based on CloudWatch metrics and send SMS(Text) Notifications or Emails
@@ -36,6 +38,7 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * Lambda funtions as targets for a load balancer
 * Elastic Container Registry (ECR) - fully-managed Docker container registry that makes it easy to store, manage, and deploy Docker container images!
 * You can use Amazon Elastic Container Service (ECS) istead of ASG with Service Auto Scaling to adjust running containers desired count automatically.
+* Awasome AWS documentation.
 
 
 ![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)
@@ -149,6 +152,8 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 
 ## Code and apliccation deployment is beyond the scope of this repo. This repo for infrastructure provisioning only
 
+AWS CodeDeploy is a managed deployment technology. It provides great features like rolling deployments, automatic rollback, and load balancer integration. It is technology agnostic and Amazon uses it to deploy everything. 
+
 ASSUMING YOU ALREADY HAVE an AWS account and CodeDeploy setup
 
 Here are the basic that we take on a deployment for M2 
@@ -219,6 +224,14 @@ File 'config_files/scripts/afterInstall.bash' should run setup:upgrade --keep-ge
 
 Source (https://magento.stackexchange.com/questions/224198/magento-2-aws-automatic-codedeploy-via-github-webhook)
 
+##How to Deploy With Docker 
+
+Just run command in your codeDeploy script 
+
+```
+docker pull [OPTIONS] MAGENTO_IMAGE_NAME[:TAG|@DIGEST]
+
+```
 
 If you have any questions feel free send me an email  – yegorshytikov@gmail.com	
 
