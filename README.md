@@ -129,7 +129,7 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 ```
 
 # Why not Magento Cloud?
-
+```
 +-----------------------------------------+-------------------------------------------+
 |              Magento Cloud              |               This Solution               |
 +-----------------------------------------+-------------------------------------------+
@@ -152,6 +152,7 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 |                                         | Magento 1/2, WordPres, Drupal, Joomla,    |
 |                                         | Presta Shop, Open Cart, Laravel, Django   |
 +-----------------------------------------+-------------------------------------------+
+```
 
 # Basic Deployment With CodeDeploy Example 
 
