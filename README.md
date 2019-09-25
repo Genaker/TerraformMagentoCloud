@@ -33,6 +33,8 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * Manual Scaling for Magento Auto Scaling Group (ASG)
 * AWS Command Line Interface (CLI) - tool to manage your AWS services. You can control multiple AWS services from the command line and automate them through scripts.
 * DynamoDb for logs, indexes, analytics
+* Lambda funtions as targets for a load balancer
+* Elastic Container Registry (ECR) - fully-managed Docker container registry that makes it easy to store, manage, and deploy Docker container images!
 
 
 ![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)
