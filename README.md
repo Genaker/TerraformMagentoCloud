@@ -38,7 +38,7 @@ This reposetory contains Magento 2 Cloud Terraform infrastructure as a code for 
 * Lambda funtions as targets for a load balancer
 * Elastic Container Registry (ECR) - fully-managed Docker container registry that makes it easy to store, manage, and deploy Docker container images!
 * You can use Amazon Elastic Container Service (ECS) istead of ASG with Service Auto Scaling to adjust running containers desired count automatically.
-* Awasome AWS documentation.
+* Awesome AWS documentation is Open Source and on GitHub
 
 
 ![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)
