@@ -243,7 +243,7 @@ docker pull [OPTIONS] MAGENTO_IMAGE_NAME[:TAG|@DIGEST]
 ```
 # Use DynamoDb with Magento 2
 
-MAgento by default has PHP Library to work with Dynamo DB. 
+Magento out of the box has PHP Library to work with Dynamo DB. 
 
 ```
 use Aws\DynamoDb\Exception\DynamoDbException;
@@ -279,7 +279,6 @@ $params = [
     'Item' => $item
 ];
 
-
 try {
     $result = $dynamodb->putItem($params);
     echo "Added item: $year - $title\n";
@@ -294,7 +293,6 @@ try {
 
 You can logs records to a DynamoDB table with the AWS SDK and Monolog using /Monolog/Handler/DynamoDbHandler.php
 
-
 When Time to Live (TTL) is enabled on a table in Amazon DynamoDB, a background job checks the TTL attribute of items to determine whether they are expired.
 
 Also you can use the Amazon Web Services CloudWatch Logs Handler for Monolog library to integrate Magento 2 Monolog with CloudWatch Logs (https://github.com/maxbanton/cwh)
@@ -302,7 +300,6 @@ Also you can use the Amazon Web Services CloudWatch Logs Handler for Monolog lib
 ```
 php composer.phar require maxbanton/cwh:^1.0
 ```
-
 
 If you have any questions feel free to send me an email  – yegorshytikov@gmail.com	
 
