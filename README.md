@@ -241,6 +241,68 @@ Just run command in your codeDeploy script
 docker pull [OPTIONS] MAGENTO_IMAGE_NAME[:TAG|@DIGEST]
 
 ```
+# Use DynamoDb with Magento 2
+
+MAgento by default has PHP Library to work with Dynamo DB. 
+
+```
+use Aws\DynamoDb\Exception\DynamoDbException;
+use Aws\DynamoDb\Marshaler;
+
+$sdk = new Aws\Sdk([
+    'endpoint'   => 'http://localhost:8000',
+    'region'   => 'us-west-2',
+    'version'  => 'latest'
+]);
+
+$dynamodb = $sdk->createDynamoDb();
+$marshaler = new Marshaler();
+
+$tableName = 'Movies';
+
+$year = 2015;
+$title = 'The Big New Movie';
+
+$item = $marshaler->marshalJson('
+    {
+        "year": ' . $year . ',
+        "title": "' . $title . '",
+        "info": {
+            "plot": "Nothing happens at all.",
+            "rating": 0
+        }
+    }
+');
+
+$params = [
+    'TableName' => 'Movies',
+    'Item' => $item
+];
+
+
+try {
+    $result = $dynamodb->putItem($params);
+    echo "Added item: $year - $title\n";
+
+} catch (DynamoDbException $e) {
+    echo "Unable to add item:\n";
+    echo $e->getMessage() . "\n";
+}
+
+?>
+```
+
+You can logs records to a DynamoDB table with the AWS SDK and Monolog using /Monolog/Handler/DynamoDbHandler.php
+
+
+When Time to Live (TTL) is enabled on a table in Amazon DynamoDB, a background job checks the TTL attribute of items to determine whether they are expired.
+
+Also you can use the Amazon Web Services CloudWatch Logs Handler for Monolog library to integrate Magento 2 Monolog with CloudWatch Logs (https://github.com/maxbanton/cwh)
+
+```
+php composer.phar require maxbanton/cwh:^1.0
+```
+
 
 If you have any questions feel free to send me an email  – yegorshytikov@gmail.com	
 
