@@ -6,6 +6,8 @@ This Infrastructure is the result of years of experience scaling Magento 1 and 2
 
 Leverage your own AWS Account dramatically reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
 
+Enterprice Support/Installation Package available
+
 ## AWS Magento 2 Cloud Features:
 * True Horizontal Auto Scaling 
 * Affordable(starting from ~300$ for us-west-2 region)
