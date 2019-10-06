@@ -6,7 +6,8 @@ This Infrastructure is the result of years of experience scaling Magento 1 and 2
 
 Leverage your own AWS Account dramatically reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
 
-##Enterprice Support/Installation/Development Package available
+##Enterprice Support/Installation/Development Package available.
+
 More information: yegorshytikov@gmail.com
 
 ## AWS Magento 2 Cloud Features:
