@@ -52,8 +52,14 @@ More information: yegorshytikov@gmail.com
 * You can use Amazon Elastic Container Service (ECS) instead of ASG with Service Auto Scaling to adjust running containers desired count automatically.
 * Awesome AWS documentation is Open Source and on GitHub
 
-
 ![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)
+
+# Running and Scaling Magento on AWS (Video)
+[![Magento AWS Cloud](https://img.youtube.com/vi/0hVymqegs9Y/0.jpg)](https://www.youtube.com/watch?v=0hVymqegs9Y)
+
+Architecting your Magento platform to grow with your business can sometimes be a challenge. This video walks through the steps needed to take an out-of-the-box, single-node Magento implementation and turn it into a highly available, elastic, and robust deployment. This includes an end-to-end caching strategy that provides an efficient front-end cache (including populated shopping carts) using Varnish on Amazon EC2 as well as offloading the Magento caches to separate infrastructure such as Amazon ElastiCache. We also look at strategies to manage the Magento Media library outside of the application instances, including EC2-based shared storage solutions and Amazon S3. At the data layer we look at Magento-specific Amazon RDS-tuning strategies including configuring Magento to use read replicas for horizontal scalability.
+
+#Our Infrastructure
 
 Infrastructure consists of multiple layers (autoscaling, alb, rds, security-group, vpc) where each layer is configured using one of [Terraform AWS modules](https://github.com/terraform-aws-modules/) with arguments specified in `terraform.tfvars` in layer's directory.
 
