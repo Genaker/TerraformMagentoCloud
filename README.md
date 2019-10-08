@@ -54,7 +54,7 @@ More information: yegorshytikov@gmail.com
 
 ![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)
 
-[![Magento 2 AWS Infrastructure Cloud Flat view] Flat View](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png)
+[Cloud Flat View](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png)
 
 # Running and Scaling Magento on AWS (Video)
 [![Magento AWS Cloud](https://img.youtube.com/vi/0hVymqegs9Y/0.jpg)](https://www.youtube.com/watch?v=0hVymqegs9Y)
