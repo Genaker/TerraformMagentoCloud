@@ -313,5 +313,8 @@ Also you can use the Amazon Web Services CloudWatch Logs Handler for Monolog lib
 php composer.phar require maxbanton/cwh:^1.0
 ```
 
+[![Magento AWS Cloud](https://img.youtube.com/vi/0hVymqegs9Y/0.jpg)](https://www.youtube.com/watch?v=0hVymqegs9Y)
+
+
 If you have any questions feel free to send me an email  – yegorshytikov@gmail.com	
 
