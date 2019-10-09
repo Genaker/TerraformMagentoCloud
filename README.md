@@ -1,12 +1,12 @@
-# Infrastructure as a code for Magento 2 Cloud Architecture on AWS
+# Infrastructure as code for Magento 2 Cloud Architecture on AWS
 
-This repository contains Magento 2 Cloud Terraform infrastructure as a code for AWS Public Cloud
+This repository contains Magento 2 Cloud Terraform infrastructure as code for AWS Public Cloud
 
 This Infrastructure is the result of years of experience scaling Magento 1 and 2 in the cloud. It comes with the best practises baked right in saving your business time and money and customers.
 
-Leverage your own AWS Account dramatically reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
+Leverage your own AWS Account dramatically to reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
 
-##Enterprice Support/Installation/Development Package available.
+##Enterprise Support/Installation/Development Package available.
 
 More information: yegorshytikov@gmail.com
 
@@ -155,10 +155,10 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 | Fastly CDN only                         | Completely CDN agnostic,                  |
 |                                         |  works with Cloudflare, CloudFront        |
 +-----------------------------------------+-------------------------------------------+
-| Works only with Enterprice version M2   | Works with any version of Magento 1/2     |
+| Works only with Enterprise version M2   | Works with any version of Magento 1/2     |
 +-----------------------------------------+-------------------------------------------+
 | Expansive $2000-$10000 month +          | Paying only for AWS resources you used,   |
-| Enterprice license                      | starting from 300$ months                 |
+| Enterprise license                      | starting from 300$ months                 |
 +-----------------------------------------+-------------------------------------------+
 | Not Customizable                        | Fully Customizeble                        |
 +-----------------------------------------+-------------------------------------------+
