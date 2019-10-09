@@ -6,7 +6,7 @@ This Infrastructure is the result of years of experience scaling Magento 1 and 2
 
 Leverage your own AWS Account dramatically to reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
 
-##Enterprise Support/Installation/Development Package available.
+## Enterprise Support/Installation/Development Package available.
 
 More information: yegorshytikov@gmail.com
 
