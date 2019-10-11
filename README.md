@@ -7,7 +7,7 @@ This Infrastructure is the result of years of experience scaling Magento 1 and 2
 Leverage your own AWS Account dramatically to reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
 
 ## Enterprise Support/Installation/Development Package available.
-Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services for businesses based on this Open Source Solution.
+Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services for businesses based on this Open Source project.
 Nowerday this project has 6 partners (2 USA (California), 1 Poland, 2 Ukraine, 1 Pakistan). List will be soon, now you can  send me an email for contacts.
 If you are willing to be listed as cloud service provider feel free message me.
 
