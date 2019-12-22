@@ -42,7 +42,7 @@ https://github.com/Genaker/AWS_Magento2_Ansible
 * ALB Path-Based Routing, Host-Based Routing, Lambda functions as targets, HTTP header/method-based routing, Query string parameter-based routing 		
 * Scaled Varnish ASG
 * Dedicated Admin/Cron ASG
-* You can easily add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API), just copy paste code  
+* You can easily add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API), just copy paste code 
 * Possibility to run the same infrastructure on Production/Staging/Dev environment, different projects
 * Automatic CI/CD (CodePipeline/CodeDeploy) deployments possible
 * AWS CodeDeploy In-place deployment, Blue/green deployment form Git or S3, Redeploy or Roll Back
@@ -76,7 +76,8 @@ Terraform use the SSH protocol to clone the modules, configured SSH keys will be
 
 Terraform uses this during the module installation step of terraform init to download the source code to a directory on local disk so that it can be used by other Terraform commands.
 
-[Terragrunt](https://github.com/gruntwork-io/terragrunt) is used to work with Terraform configurations which allows to orchestrate dependent layers, update arguments dynamically and keep configurations [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself).
+[Terragrunt](https://github.com/gruntwork-io/terragrunt) is used to work with Terraform configurations which allows to orchestrate dependent layers, update arguments dynamically and keep configurations. Dfine Terraform code once, no matter how many environments you have.   [DRY]
+(https://en.wikipedia.org/wiki/Don%27t_repeat_yourself).
 
 ## Pre-requirements
 
