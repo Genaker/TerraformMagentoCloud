@@ -1,4 +1,4 @@
-# Infrastructure as code for Magento 2 Cloud Architecture on AWS
+# Infrastructure as code for eCommerce Cloud Architecture on AWS
 
 This repository contains Magento 2 Cloud Terraform infrastructure as code for AWS Public Cloud
 
