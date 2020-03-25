@@ -165,6 +165,18 @@ Alternatively, you can create infrastructure in a single layer (eg, `autoscaling
 
 See [official Terragrunt documentation](https://github.com/gruntwork-io/terragrunt/blob/master/README.md) for all available commands and features.
 
+# Debug logging
+
+If you set the TERRAGRUNT_DEBUG environment variable to “true”, the stack trace for any error will be printed to stdout when you run the app.
+
+Additionally, newer features introduced in v0.19.0 (such as locals and dependency blocks) can output more verbose logging if you set the TG_LOG environment variable to debug.
+
+Turn on debug when you need do troubleshooting.
+```
+# or if you run with terragrunt
+TF_LOG=DEBUG terragrunt <command>
+```
+
 # Clearing the Terragrunt cache
 
 Terragrunt creates a .terragrunt-cache folder in the current working directory as its scratch directory. It downloads your remote Terraform configurations into this folder, runs your Terraform commands in this folder, and any modules and providers those commands download also get stored in this folder. You can safely delete this folder any time and Terragrunt will recreate it as necessary.
