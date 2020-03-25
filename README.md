@@ -86,18 +86,61 @@ Terraform uses this during the module installation step of terraform init to dow
 - [tfvars-annotations](https://github.com/antonbabenko/tfvars-annotations) - Update values in terraform.tfvars using annotations
 - Optional: [pre-commit hooks](http://pre-commit.com) to keep Terraform formatting and documentation up-to-date
 
+# Install HomeBrew on Linux
+
+Paste at a terminal prompt:
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+```
+The installation script installs Homebrew to /home/linuxbrew/.linuxbrew using sudo if possible and in your home directory at ~/.linuxbrew otherwise. Homebrew does not use sudo after installation. Using /home/linuxbrew/.linuxbrew allows the use of more binary packages (bottles) than installing in your personal home directory.
+
+Follow the Next steps instructions to add Homebrew to your PATH and to your bash shell profile script, either ~/.profile on Debian/Ubuntu or ~/.bash_profile on CentOS/Fedora/RedHat.
+```
+test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+```
+You’re done! Try installing a package:
+```
+brew install hello
+```
+If you’re using an older distribution of Linux, installing your first package will also install a recent version of glibc and gcc. Use brew doctor to troubleshoot common issues.
+
 If you are using Mac you can install all dependencies using Homebrew:
 
     $ brew install terraform terragrunt pre-commit
+    
+## Manual install:
 
+You can install Terragrunt manually by going to the Releases Page, downloading the binary for your OS, renaming it to terragrunt, and adding it to your PATH.
+
+# Install Terragrunt and Terraform Ubuntu Manual
+```
+    sudo -s;
+    export TERRAFORM_VERSION=0.12.24 \
+    && export TERRAGRUNT_VERSION=0.23.2 \
+    && mkdir -p /ci/terraform_${TERRAFORM_VERSION} \
+    && wget -nv -O /ci/terraform_${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && unzip -o /ci/terraform_${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin/ \
+    && mkdir -p /ci/terragrunt-${TERRAGRUNT_VERSION}/ \
+    && wget -nv -O /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 \
+    && sudo chmod u+x /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt \
+    && cp /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt /usr/local/bin \
+    && rm -rf /ci
+```
+Test Terragrunt/Terraform installation(Optional):
+```
+terragrunt -v;
+terraform -v
+```
 By default, access credentials to AWS account should be set using environment variables:
-
+```
     $ export AWS_DEFAULT_REGION=us-west-1
     $ export AWS_ACCESS_KEY_ID=...
     $ export AWS_SECRET_ACCESS_KEY=...
-
+```
 Alternatively, you can edit `common/main_providers.tf` and use another authentication mechanism as described in [AWS provider documentation](https://www.terraform.io/docs/providers/aws/index.html#authentication).
-
 
 
 ## How to use it?
