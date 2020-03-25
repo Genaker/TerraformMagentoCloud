@@ -2,13 +2,15 @@
 
 This repository contains Magento 2 Cloud Terraform infrastructure as code for AWS Public Cloud
 
-This Infrastructure is the result of years of experience scaling Magento 1 and 2 in the cloud. It comes with the best practises baked right in saving your business time and money and customers.
+This Infrastructure is the result of years of experience scaling Magento 1 and 2 in the cloud. It comes with the best practices baked right in saving your business time and money and customers.
 
 Leverage your own AWS Account dramatically to reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
 
+This Script can be used with any eCommerce/Web Paltform WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP, VueStorefront, Silyus, Oddo, ORO not just with MAgento. It has name Magento because it was designed for Magento at firs. But I know projects they use it to run Enterparaci Java applications with auto scaling.
+
 ## Enterprise Support/Installation/Development Package available.
 Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services for businesses based on this Open Source project.
-Nowerday this project has 6 partners (2 USA (California), 1 Poland, 2 Ukraine, 1 Pakistan). List will be soon, now you can  send me an email for contacts.
+Nowerday this project has 6 partners (2 USA (California), 1 Poland, 2 Ukraine, 1 Pakistan, 1 UK, 1 New Zeleam, 1 Brasil). List will be soon, now you can  send me an email for contacts.
 If you are willing to be listed as cloud service provider feel free message me.
 
 
