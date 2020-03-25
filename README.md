@@ -119,7 +119,7 @@ You can install Terragrunt manually by going to the Releases Page, downloading t
 
 # Install Terragrunt and Terraform Ubuntu Manual
 ```
-    sudo -s;
+sudo -s; ## run as a super user
     export TERRAFORM_VERSION=0.12.24 \
     && export TERRAGRUNT_VERSION=0.23.2 \
     && mkdir -p /ci/terraform_${TERRAFORM_VERSION} \
@@ -127,9 +127,11 @@ You can install Terragrunt manually by going to the Releases Page, downloading t
     && unzip -o /ci/terraform_${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin/ \
     && mkdir -p /ci/terragrunt-${TERRAGRUNT_VERSION}/ \
     && wget -nv -O /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 \
-    && sudo chmod u+x /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt \
-    && cp /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt /usr/local/bin \
-    && rm -rf /ci
+    && sudo chmod a+x /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt \
+    && cp /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt /bin \
+    && chmod a+x /bin/terragrunt \
+    && rm -rf /ci \
+    && exit
 ```
 Test Terragrunt/Terraform installation(Optional):
 ```
