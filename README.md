@@ -211,7 +211,7 @@ The behavior of any terraform destroy command can be previewed at any time with 
 # Production staging enviroments 
 
 You can copy/paste folder to creaate new enviroment. Consider the following file structure, which defines three magento environments (prod, project-3, stage) with the same infrastructure in each one (an app, a MySQL database, and a VPC):
-
+```
 └── magento
     ├── prod
     │   ├── app
@@ -234,19 +234,19 @@ You can copy/paste folder to creaate new enviroment. Consider the following file
         │   └── main.tf
         └── vpc
             └── main.tf
-            
+```    
 The contents of each environment will be more or less identical, except perhaps for a few settings (e.g. the prod environment may run bigger or more servers). As the size of the infrastructure grows, having to maintain all of this duplicated code between environments becomes more error prone. You can reduce the amount of copy paste using Terraform modules, but even the code to instantiate a module and set up input variables, output variables, providers, and remote state can still create a lot of maintenance overhead.
 
 Terragrunt allows you to keep your Magento backend configuration DRY (“Don’t Repeat Yourself”) by defining it once in a root location and inheriting that configuration in all child modules. Let’s say your Terraform code has the following folder layout:
-
+```
 stage
 ├── frontend-app
 │   └── main.tf
 └── mysql
     └── main.tf
-    
+``` 
 To use Terragrunt, add a single terragrunt.hcl file to the root of your repo, in the stage folder, and one terragrunt.hcl file in each module folder:
-
+```
 stage
 ├── terragrunt.hcl
 ├── frontend-app
@@ -255,6 +255,9 @@ stage
 └── mysql
     ├── main.tf
     └── terragrunt.hcl
+```
+Now you can define your backend configuration just once in the root terragrunt.hcl file!
+
 
 # Approximate Magento 2 AWS Cloud infrastructure Cost
 
