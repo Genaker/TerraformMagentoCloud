@@ -164,7 +164,9 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 
 # Demo video how it works (click on image)
 
-<img alt="Magento AWS Cloud" src="https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png" href="https://www.youtube.com/watch?v=kmnlrXSTQlM" width="50%" height="50%">
+<a href="https://www.youtube.com/watch?v=kmnlrXSTQlM">
+<img alt="Magento AWS Cloud" src="https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png" width="50%" height="50%">
+</a>
 
 or click url: (https://www.youtube.com/watch?v=kmnlrXSTQlM)
 
