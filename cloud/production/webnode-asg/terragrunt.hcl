@@ -41,7 +41,7 @@ inputs = {
 
   # The EC2 image ID to launch
   # type: string
-  image_id = dependency.aws-data.outputs.amazon_linux2_aws_ami_id
+  image_id = "ami-04937aae676c8b679" #dependency.aws-data.outputs.amazon_linux2_aws_ami_id
 
   # The size of instance to launch
   # type: string
