@@ -65,9 +65,6 @@ https://github.com/Genaker/AWS_Magento2_Ansible
 
 [Cloud Flat View](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png)
 
-# Running and Scaling Magento on AWS (Video)
-[![Magento AWS Cloud](https://img.youtube.com/vi/0hVymqegs9Y/0.jpg)](https://www.youtube.com/watch?v=0hVymqegs9Y)
-
 Architecting your Magento platform to grow with your business can sometimes be a challenge. This video walks through the steps needed to take an out-of-the-box, single-node Magento implementation and turn it into a highly available, elastic, and robust deployment. This includes an end-to-end caching strategy that provides an efficient front-end cache (including populated shopping carts) using Varnish on Amazon EC2 as well as offloading the Magento caches to separate infrastructure such as Amazon ElastiCache. We also look at strategies to manage the Magento Media library outside of the application instances, including EC2-based shared storage solutions and Amazon S3. At the data layer we look at Magento-specific Amazon RDS-tuning strategies including configuring Magento to use read replicas for horizontal scalability.
 
 # Our Infrastructure
@@ -146,7 +143,6 @@ By default, access credentials to AWS account should be set using environment va
 ```
 Alternatively, you can edit `common/main_providers.tf` and use another authentication mechanism as described in [AWS provider documentation](https://www.terraform.io/docs/providers/aws/index.html#authentication).
 
-
 ## How to use it?
 
 First, you should run `chmod +x common/scripts/update_dynamic_values_in_tfvars.sh`, review and specify all required arguments for each layer. Run this to see all errors:
@@ -164,6 +160,12 @@ Alternatively, you can create infrastructure in a single layer (eg, `autoscaling
     $ terragrunt apply
 
 See [official Terragrunt documentation](https://github.com/gruntwork-io/terragrunt/blob/master/README.md) for all available commands and features.
+
+
+# Demo video how it works (click on image)
+
+[![Magento AWS Cloud](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png)](https://www.youtube.com/watch?v=kmnlrXSTQlM)
+
 
 # Debug logging
 
