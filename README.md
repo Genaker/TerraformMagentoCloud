@@ -295,6 +295,9 @@ Now you can define your backend configuration just once in the root terragrunt.h
 |             |                     | Total     | $269.55    |       |            |               |               |
 +-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
 ```
+# eCommerce Cloud Price Visualisation 
+
+![Magento 2 AWS Cloud Cost](https://github.com/Genaker/TerraformMagentoCloud/blob/master/small-big.png)
 
 # Why not Magento Cloud?
 ```
@@ -472,6 +475,6 @@ If you have any questions feel free to send me an email  – yegorshytikov@gmail
 Terraform AWS moules maintained by [Anton Babenko](https://github.com/antonbabenko)
 
 All content, including [Terraform AWS modules](https://github.com/terraform-aws-modules/) used in these configurations, is released under the MIT License. 
-
+ 
 
 
