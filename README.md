@@ -69,8 +69,6 @@ https://github.com/Genaker/AWS_Magento2_Ansible
 
 Infrastructure consists of multiple layers (autoscaling, alb, rds, security-group, vpc) where each layer is configured using one of [Terraform AWS modules](https://github.com/terraform-aws-modules/) with arguments specified in `terraform.tfvars` in layer's directory.
 
-Terraform use the SSH protocol to clone the modules, configured SSH keys will be used automatically. Add SSH key to github account. (https://help.github.com/en/enterprise/2.15/user/articles/adding-a-new-ssh-key-to-your-github-account)
-
 Terraform uses this during the module installation step of terraform init to download the source code to a directory on local disk so that it can be used by other Terraform commands.
 
 Public Terraform registry provides infrastructure modules for many infrastructure resources at registry.terraform.io.
@@ -136,7 +134,12 @@ Test Terragrunt/Terraform installation(Optional):
 terragrunt -v;
 terraform -v
 ```
-By default, access credentials to AWS account should be set using environment variables:
+
+## How to use it?
+
+Step 0. Terraform use the SSH protocol to clone the modules, configured SSH keys will be used automatically. Add SSH key to github account. (https://help.github.com/en/enterprise/2.15/user/articles/adding-a-new-ssh-key-to-your-github-account)
+
+Step 1. Set credential. By default, access credentials to AWS account should be set using environment variables:
 ```
      export AWS_DEFAULT_REGION=us-west-1
      export AWS_ACCESS_KEY_ID=...
@@ -144,13 +147,7 @@ By default, access credentials to AWS account should be set using environment va
 ```
 Alternatively, you can edit `common/main_providers.tf` and use another authentication mechanism as described in [AWS provider documentation](https://www.terraform.io/docs/providers/aws/index.html#authentication).
 
-## How to use it?
-
-First, you should run `chmod +x common/scripts/update_dynamic_values_in_tfvars.sh`, review and specify all required arguments for each layer. Run this to see all errors:
-
-    $ terragrunt validate-all --terragrunt-ignore-dependency-errors |& grep -C 3 "Error: "
-
-Once all arguments are set, run this command to create infrastructure in all layers in a single region:
+Step 2. Once all arguments are set, run this command to create infrastructure in all layers in a single region:
 
     $ cd production
     $ terragrunt apply-all
