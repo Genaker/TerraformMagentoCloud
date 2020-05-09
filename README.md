@@ -73,8 +73,11 @@ Terraform use the SSH protocol to clone the modules, configured SSH keys will be
 
 Terraform uses this during the module installation step of terraform init to download the source code to a directory on local disk so that it can be used by other Terraform commands.
 
+Public Terraform registry provides infrastructure modules for many infrastructure resources at registry.terraform.io.
+
 [Terragrunt](https://github.com/gruntwork-io/terragrunt) is used to work with Terraform configurations which allows to orchestrate dependent layers, update arguments dynamically and keep configurations. Dfine Terraform code once, no matter how many environments you have.   [DRY]
 (https://en.wikipedia.org/wiki/Don%27t_repeat_yourself).
+
 
 ## Pre-requirements
 
