@@ -6,7 +6,7 @@ This Infrastructure is the result of years of experience scaling Magento 1 and 2
 
 Leverage your own AWS Account dramatically to reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
 
-This Script can be used with any eCommerce/Web Paltform WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP, VueStorefront, Silyus, Oddo, ORO not just with MAgento. It has name Magento because it was designed for Magento at firs. But I know projects they use it to run Enterparaci Java applications with auto scaling.
+This Script can be used with any eCommerce/Web Paltform WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP, VueStorefront, Silyus, Oddo, ORO not just with MAgento. It has name Magento because it was designed for Magento at firs. But I know projects they use it to run Enterparaci Java applications with auto scaling. How to setup  software into the cloud you cen read about this below.  
 
 ## Enterprise Support/Installation/Development Package available.
 Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services for businesses based on this Open Source project.
@@ -410,6 +410,25 @@ Just run command in your codeDeploy script
 docker pull [OPTIONS] MAGENTO_IMAGE_NAME[:TAG|@DIGEST]
 
 ```
+
+# Automate the installation of software using Golden AMI
+
+In this post, I will show you how to automate the installation of software from the your golden AMI (Amazon Machine Image)
+
+A “golden AMI” or “gold image” is an AMI you standardize through configuration, consistent security patching, and hardening. It also contains agents you approve for logging, security, performance monitoring, etc. Many enterprise customers have a mature AMI pipeline setup to create a golden AMI of base operating systems for the organization. For a sample golden AMI pipeline, see [The Golden AMI Pipeline] (https://aws.amazon.com/blogs/awsmarketplace/announcing-the-golden-ami-pipeline/).
+
+You can launch an instance from an existing AMI, customize the instance, setup Software (MAgento, ODDO, Wordpres, Shopware etc.) and then save this updated configuration as a custom AMI. Instances launched from this new custom AMI include the customizations that you made when you created the AMI.
+
+# Building an Golden AMI with Packer
+
+Packer is an open-source tool by Hashicorp that automates the creation of machine images for different platforms. Developers specify the machine configuration using a JSON file called template, and then run Packer to build the image.
+
+
+One key feature of Packer is its capability to create images targeted to different platforms, all from the same specification. This is a nice feature that allows you to create machine images of different types without repetitive coding.
+
+You can get Packer and its documentation at [Packer Official Site](https://www.packer.io/).  
+
+
 # Use DynamoDb with Magento 2
 
 Magento out of the box has PHP Library to work with Dynamo DB. 
