@@ -141,7 +141,7 @@ Step 0. Terraform use the SSH protocol to clone the modules, configured SSH keys
 
 Step 1. Set credential. By default, access credentials to AWS account should be set using environment variables:
 ```
-     export AWS_DEFAULT_REGION=us-west-1
+     export AWS_DEFAULT_REGION=us-west-1 ## change it to your preferable AWS region
      export AWS_ACCESS_KEY_ID=...
      export AWS_SECRET_ACCESS_KEY=...
 ```
