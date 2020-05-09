@@ -1,4 +1,4 @@
-# Infrastructure as code for eCommerce Cloud Architecture on AWS
+# Infrastructure as code for eCommerce Cloud Architecture on Multi Cloud (AWS,GCP,Azure)
 
 This repository contains Magento 2 Cloud Terraform infrastructure as code for AWS Public Cloud
 
@@ -263,6 +263,13 @@ stage
     └── terragrunt.hcl
 ```
 Now you can define your backend configuration just once in the root terragrunt.hcl file!
+
+
+# Multi cloud deployments 
+
+Terraform provides Magento 2 Open Source Cloud infrastructure as a code approach to the provision and manage any cloud (AWS, GoogleCloud, Azure, Alibaba, or other types of services such as Kubernetes).
+
+Terraform can manage popular service providers, such as AWS, GCP, Micosoft Azure, Alibaba Cloud, and VMware, as well as custom in-house and on-premises solutions.
 
 
 # Approximate Magento 2 AWS Cloud infrastructure Cost
