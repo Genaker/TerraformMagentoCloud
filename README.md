@@ -139,6 +139,8 @@ terraform -v
 
 Step 0. Terraform use the SSH protocol to clone the modules, configured SSH keys will be used automatically. Add SSH key to github account. (https://help.github.com/en/enterprise/2.15/user/articles/adding-a-new-ssh-key-to-your-github-account)
 
+Git+SSH is used because it works for both public and private repositories.
+
 Step 1. Set credential. By default, access credentials to AWS account should be set using environment variables:
 ```
      export AWS_DEFAULT_REGION=us-west-1 ## change it to your preferable AWS region
