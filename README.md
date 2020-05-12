@@ -9,8 +9,8 @@ Leverage your own AWS Account dramatically to reduce your monthly spend instead 
 This Script can be used with any eCommerce/Web Paltform WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP, VueStorefront, Silyus, Oddo, ORO not just with MAgento. It has name Magento because it was designed for Magento at firs. But I know projects they use it to run Enterparaci Java applications with auto scaling. How to setup  software into the cloud you cen read about this below.  
 
 ## Enterprise Support/Installation/Development Package available.
-Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services for businesses based on this Open Source project.
-Nowerday this project has 6 partners (2 USA (California), 1 Poland, 2 Ukraine, 1 Pakistan, 1 UK, 1 New Zeleam, 1 Brasil). List will be soon, now you can  send me an email for contacts.
+Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services/support for businesses based on this Open Source project.
+Nowerday this project has 10+ partners. List will be soon, now you can send me an email for contacts.
 If you are willing to be listed as cloud service provider feel free message me.
 
 
