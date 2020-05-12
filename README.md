@@ -2,21 +2,21 @@
 
 This repository contains Magento 2 Cloud Terraform infrastructure as code for AWS Public Cloud
 
-This Infrastructure is the result of years of experience scaling Magento 1 and 2 in the cloud. It comes with the best practices baked right in saving your business time and money and customers.
+This Infrastructure is the result of years of experience scaling Magento 1 and 2 in the cloud. It comes with the best cloud development practices baked right to save your time and money.
 
-Leverage your own AWS Account dramatically to reduce your monthly spend instead of paying an expensive managed hosting provider (PaaS, SaaS).
+Leverage your own AWS Account dramatically reduces your monthly spend instead of paying to expensive managed hosting provider (PaaS, SaaS).
 
-This Script can be used with any eCommerce/Web Paltform WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP, VueStorefront, Silyus, Oddo, ORO not just with MAgento. It has name Magento because it was designed for Magento at firs. But I know projects they use it to run Enterparaci Java applications with auto scaling. How to setup  software into the cloud you cen read about this below.  
+This Script can be used with any eCommerce/Web Platform WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP, VueStorefront, Silyus, Oddo, ORO not just with MAgento. It has name Magento because it was designed for Magento at firs. But I know projects they use it to run Enterparaci Java applications with auto scaling. How to setup  software into the cloud you can read about this below.  
 
 ## Enterprise Support/Installation/Development Package available.
 Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services/support for businesses based on this Open Source project.
-Nowerday this project has 10+ partners. List will be soon, now you can send me an email for contacts.
+Nowerdays this project has 10+ partners. 
 If you are willing to be listed as cloud service provider feel free message me.
 
 
 More information: yegorshytikov@gmail.com
 
-I also Have Ansible Magento Clout provisioning implementation:
+I also Have Ansible Magento Cloud provisioning implementation:
 https://github.com/Genaker/AWS_Magento2_Ansible
 
 ## AWS Magento 2 Cloud Features:
@@ -44,14 +44,14 @@ https://github.com/Genaker/AWS_Magento2_Ansible
 * ALB Path-Based Routing, Host-Based Routing, Lambda functions as targets, HTTP header/method-based routing, Query string parameter-based routing 		
 * Scaled Varnish ASG
 * Dedicated Admin/Cron ASG
-* You can easily add new autoscaling groups for you needs (Per WebSite/for Checkout requests/for API), just copy paste code 
+* You can easily add new autoscaling groups for your needs (Per WebSite/for Checkout requests/for API), just copy paste code 
 * Possibility to run the same infrastructure on Production/Staging/Dev environment, different projects
 * Automatic CI/CD (CodePipeline/CodeDeploy) deployments possible
-* AWS CodeDeploy In-place deployment, Blue/green deployment form Git or S3, Redeploy or Roll Back
+* AWS CodeDeploy In-place deployment, Blue/green deployment from Git or S3, Redeploy or Roll Back
 * Deploying from a Development Account to a Production Account
 * Amazon Simple Email Service (Amazon SES) - cloud-based email sending service. Price $0.10 for 1K emails 
 * Amazon CloudWatch - load all the metrics (CPU, RAM, Network) in your account for search, graphing, and alarms. Metric data is kept for 15 months.
-* CloudWatch alarms that watches a single CloudWatch metric or the result of a math expression based on CloudWatch metrics and send SMS(Text) Notifications or Emails
+* CloudWatch alarms that watche a single CloudWatch metric or the result of a math expression based on CloudWatch metrics and send SMS(Text) Notifications or Emails
 * Simple and Step Scaling Policies - choose scaling metrics that trigger horizontal scaling.
 * Manual Scaling for Magento Auto Scaling Group (ASG)
 * AWS Command Line Interface (CLI) - tool to manage your AWS services. You can control multiple AWS services from the command line and automate them through scripts.
@@ -73,7 +73,7 @@ Terraform uses this during the module installation step of terraform init to dow
 
 Public Terraform registry provides infrastructure modules for many infrastructure resources at registry.terraform.io.
 
-[Terragrunt](https://github.com/gruntwork-io/terragrunt) is used to work with Terraform configurations which allows to orchestrate dependent layers, update arguments dynamically and keep configurations. Dfine Terraform code once, no matter how many environments you have.   [DRY]
+[Terragrunt](https://github.com/gruntwork-io/terragrunt) is used to work with Terraform configurations which allows to orchestrate dependent layers, update arguments dynamically and keep configurations. Define Terraform code once, no matter how many environments you have.   [DRY]
 (https://en.wikipedia.org/wiki/Don%27t_repeat_yourself).
 
 
@@ -170,7 +170,7 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 
 or click url: (https://www.youtube.com/watch?v=kmnlrXSTQlM)
 
-Architecting your Magento platform to grow with your business can sometimes be a challenge. This video walks through the steps needed to take an out-of-the-box, single-node Magento implementation and turn it into a highly available, elastic, and robust deployment. This includes an end-to-end caching strategy that provides an efficient front-end cache (including populated shopping carts) using Varnish on Amazon EC2 as well as offloading the Magento caches to separate infrastructure such as Amazon ElastiCache. We also look at strategies to manage the Magento Media library outside of the application instances, including EEFS shared storage solutions.
+Architecting your Magento platform to grow with your business can sometimes be a challenge. This video walks through the steps needed to take an out-of-the-box, single-node Magento implementation and turn it into a highly available, elastic, and robust deployment. This includes an end-to-end caching strategy that provides an efficient front-end cache (including populated shopping carts) using Varnish on Amazon EC2 as well as offloading the Magento caches to separate infrastructure such as Amazon ElastiCache. We also look at strategies to manage the Magento Media library outside of the application instances, including EFS shared storage solutions.
 
 
 # Debug logging
@@ -216,9 +216,9 @@ The -target flag, instead of affecting "dependencies" will instead also destroy 
 The behavior of any terraform destroy command can be previewed at any time with an equivalent terraform plan -destroy command.
 
 
-# Production staging enviroments 
+# Production staging environments 
 
-You can copy/paste folder to creaate new enviroment. Consider the following file structure, which defines three magento environments (prod, project-3, stage) with the same infrastructure in each one (an app, a MySQL database, and a VPC):
+You can copy/paste folder to create new environment. Consider the following file structure, which defines three magento environments (prod, project-3, stage) with the same infrastructure in each one (an app, a MySQL database, and a VPC):
 ```
 └── magento
     ├── prod
