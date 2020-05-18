@@ -338,7 +338,7 @@ https://github.com/Genaker/AWS_Magento2_Ansible
 
 # Basic Deployment With CodeDeploy Example 
 
-## Code and application deployment is beyond the scope of this repo. This repo for infrastructure provisioning only
+## Code and application deployment is beyond the scope of this repo. This repo for infrastructure provisioning only!!!
 
 AWS CodeDeploy is a managed deployment technology. It provides great features like rolling deployments, automatic rollback, and load balancer integration. It is technology agnostic and Amazon uses it to deploy everything. 
 
@@ -423,9 +423,7 @@ docker pull [OPTIONS] MAGENTO_IMAGE_NAME[:TAG|@DIGEST]
 
 # Automate the installation of software using Golden AMI
 
-In this post, I will show you how to automate the installation of software from the your golden AMI (Amazon Machine Image)
-
-A “golden AMI” or “gold image” is an AMI you standardize through configuration, consistent security patching, and hardening. It also contains agents you approve for logging, security, performance monitoring, etc. Many enterprise customers have a mature AMI pipeline setup to create a golden AMI of base operating systems for the organization. For a sample golden AMI pipeline, see [The Golden AMI Pipeline] (https://aws.amazon.com/blogs/awsmarketplace/announcing-the-golden-ami-pipeline/).
+A “golden AMI” or “gold image” is an Magento AMI you standardize through configuration, consistent security patching, and hardening. It also contains agents you approve for logging, security, performance monitoring, etc. Many enterprise customers have a mature AMI pipeline setup to create a golden AMI of base operating systems for the organization. For a sample golden AMI pipeline, see [The Golden AMI Pipeline] (https://aws.amazon.com/blogs/awsmarketplace/announcing-the-golden-ami-pipeline/).
 
 You can launch an instance from an existing AMI, customize the instance, setup Software (MAgento, ODDO, Wordpres, Shopware etc.) and then save this updated configuration as a custom AMI. Instances launched from this new custom AMI include the customizations that you made when you created the AMI.
 
