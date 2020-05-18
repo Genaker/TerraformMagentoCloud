@@ -8,16 +8,6 @@ Leverage your own AWS Account dramatically reduces your monthly spend instead of
 
 This Script can be used with any eCommerce/Web Platform WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP, VueStorefront, Silyus, Oddo, ORO not just with MAgento. It has name Magento because it was designed for Magento at firs. But I know projects they use it to run Enterparaci Java applications with auto scaling. How to setup  software into the cloud you can read about this below.  
 
-## Enterprise Support/Installation/Development Package available.
-Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services/support for businesses based on this Open Source project.
-Nowerdays this project has 10+ partners. 
-If you are willing to be listed as cloud service provider feel free message me.
-
-
-More information: yegorshytikov@gmail.com
-
-I also Have Ansible Magento Cloud provisioning implementation:
-https://github.com/Genaker/AWS_Magento2_Ansible
 
 ## AWS Magento 2 Cloud Features:
 * True Horizontal Auto Scaling 
@@ -272,6 +262,17 @@ Now you can define your backend configuration just once in the root terragrunt.h
 Terraform provides Magento 2 Open Source Cloud infrastructure as a code approach to the provision and manage any cloud (AWS, GoogleCloud, Azure, Alibaba, or other types of services such as Kubernetes).
 
 Terraform can manage popular service providers, such as AWS, GCP, Micosoft Azure, Alibaba Cloud, and VMware, as well as custom in-house and on-premises solutions.
+
+## Enterprise Support/Installation/Development Package available.
+Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services/support for businesses based on this Open Source project.
+Nowerdays this project has 10+ partners. 
+If you are willing to be listed as cloud service provider feel free message me.
+
+
+More information: yegorshytikov@gmail.com
+
+I also Have Ansible Magento Cloud provisioning implementation:
+https://github.com/Genaker/AWS_Magento2_Ansible
 
 
 # Approximate Magento 2 AWS Cloud infrastructure Cost
