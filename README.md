@@ -6,7 +6,7 @@ This infrastructure is the result of years of experience scaling Magento 1 and 2
 
 Leveraging your own AWS Account dramatically reduces your monthly spend vs. paying an expensive managed hosting provider (PaaS, SaaS).
 
-This script is not limited to Magento deployments and can be used with any eCommerce/Web platform, eg. WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP, VueStorefront, Silyus, Oddo, ORO etc. It includes Magento in the name because it was designed for Magento at first. There are however projects using it to run Enterprise Java applications with auto scaling.
+This script is not limited to Magento deployments and can be used with any eCommerce/Web platform, eg. WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP (Custum Private APP cloud), VueStorefront, Silyus, Oddo, ORO etc. It includes Magento in the name because it was designed for Magento at first. There are however projects using it to run Enterprise Java applications with auto scaling.
 
 ## AWS Magento 2 Cloud Features:
 * True Horizontal Auto Scaling 
