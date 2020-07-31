@@ -1,3 +1,7 @@
+locals {
+  aws_region = get_env("AWS_DEFAULT_REGION", "us-west-1")
+}
+
 terraform {
   extra_arguments "disable_input" {
     commands  = get_terraform_commands_that_need_input()
@@ -16,7 +20,7 @@ remote_state {
 
   config = {
     encrypt        = true
-    region         = "us-west-1"
+    region         = local.aws_region
     key            = format("%s/terraform.tfstate", path_relative_to_include())
     bucket         = format("terraform-states-%s", get_aws_account_id())
     dynamodb_table = format("terraform-locks-%s", get_aws_account_id())
@@ -31,7 +35,7 @@ generate "main_providers" {
   if_exists = "overwrite"
   contents  = <<EOF
 provider "aws" {
-  region = "us-west-1"
+  region = "${local.aws_region}"
 
   # Make it faster by skipping something
   skip_get_ec2_platforms      = true
