@@ -18,7 +18,7 @@ Be careful Intel CPUs are virtual and actual number of CPUs factor = 2; Graviton
 Intel CPUs have some advantages of 20-30% in some cases, however for magento (long heavy queries) physical cores are better. With higher trafic you need more CPUs.
 It is rule for uncached pages.  
 
-With Varnish/FPC it is the same. However Varnish has response time ~ 1ms and a single instance CPU can return 1000 caches pages per sec. To avoid unpredictable results with the cache invalidation, misses, uncached checkouts, cart, AJAXs, API the BEST practices is to measure performance without FPC.
+With Varnish/FPC it is the same. However Varnish has response time ~ 1ms and a single instance CPU can return 1000 caches pages per sec. To avoid unpredictable results with the cache invalidation, misses, uncached checkouts, cart, AJAXs, API the BEST practices is to measure performance without FPC. FPC is a bonus.
 
 
 ## AWS Magento 2 Cloud Features:
