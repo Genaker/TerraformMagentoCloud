@@ -8,6 +8,19 @@ Leveraging your own AWS Account dramatically reduces your monthly spend vs. payi
 
 This script is not limited to Magento deployments and can be used with any eCommerce/Web platform, eg. WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP (Custum Private APP cloud), VueStorefront, Silyus, Oddo, ORO etc. It includes Magento in the name because it was designed for Magento at first. There are however projects using it to run Enterprise Java applications with auto scaling.
 
+# Why Auoto Scaling 
+
+Increasing the number of PHP-FPM processes beyond the number of physical processor cores does not improve the performance, rather is likely to degrade it, and can consume resources needlessly. Basic rule for the web is:
+
+CPU(physical) = (Concurrent HTTP REquest * http_req_duration)
+
+Be careful Intel CPUs are virtual and actual number of CPUs factor = 2; Graviton AWS ARM64 CPUS have factor 1 and are better for concurrent request processing. 
+Intel CPUs have some advantages of 20-30% in some cases, however for magento (long heavy queries) physical cores are better. With higher trafic you need more CPUs.
+It is rule for uncached pages.  
+
+With Varnish/FPC it is the same. However Varnish has response time ~ 1ms and a single instance CPU can return 1000 caches pages per sec. To avoid unpredictable results with the cache invalidation, misses, uncached checkouts, cart, AJAXs, API the BEST practices is to measure performance without FPC.
+
+
 ## AWS Magento 2 Cloud Features:
 * True Horizontal Auto Scaling 
 * Affordable (starting from ~300$ for us-west-2 region)
