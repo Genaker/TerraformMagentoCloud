@@ -285,6 +285,8 @@ More information: yegorshytikov@gmail.com
 I also have Ansible Magento Cloud provisioning implementation:
 https://github.com/Genaker/AWS_Magento2_Ansible
 
+And also Magento Cloud provisioning Using AWS CDK. Comming soon ...
+
 
 # Approximate Magento 2 AWS Cloud infrastructure Cost
 
@@ -437,6 +439,10 @@ docker pull [OPTIONS] MAGENTO_IMAGE_NAME[:TAG|@DIGEST]
 A “golden AMI” or “gold image” is an Magento AMI you standardize through configuration, consistent security patching, and hardening. It also contains agents you approve for logging, security, performance monitoring, etc. Many enterprise customers have a mature AMI pipeline setup to create a golden AMI of base operating systems for the organization. For a sample golden AMI pipeline, see [The Golden AMI Pipeline] (https://aws.amazon.com/blogs/awsmarketplace/announcing-the-golden-ami-pipeline/).
 
 You can launch an instance from an existing AMI, customize the instance, setup Software (Magento, ODDO, Wordpress, Shopware etc.) and then save this updated configuration as a custom AMI. Instances launched from this new custom AMI include the customizations that you made when you created the AMI.
+
+# Magento 2 Installation Automatio (Centos 8.2, AWS linux with ARM support) GitHub reposetory:
+
+[Magento installation Script] (https://github.com/Genaker/Magento-AWS-Linux-2-Instalation).
 
 # Building an Golden AMI with Packer
 
