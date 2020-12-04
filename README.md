@@ -79,7 +79,7 @@ The [https://registry.terraform.io/](public Terraform registry) provides infrast
 
 # Magento 2 Multi Regional Infastructure Support 
 
-We ahve a global scale-out model. All data updates (POST, DELETE request) are directed to the main data center region. All GET and CACHED requess (black lines) are directed regional data centers. 
+We have a global scale-out model. All data updates (POST, DELETE request) are directed to the main data center region. All GET and CACHED requess (black lines) are directed regional data centers. 
 
 Geographically distant web servers add latency and degrade the shopping experience. Such mistakes can prove costly, resulting in lost customers, missed revenue, and reputational damage.
 
