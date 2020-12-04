@@ -77,6 +77,16 @@ The [https://registry.terraform.io/](public Terraform registry) provides infrast
 
 [Terragrunt](https://github.com/gruntwork-io/terragrunt) is used to work with Terraform configurations which allows you to orchestrate dependent layers, update arguments dynamically and keep configurations. Define Terraform code once, no matter how many environments you have ([DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)).
 
+# Magento 2 Multi Regional Infastructure Support 
+
+We ahve a global scale-out model. All data updates (POST, DELETE request) are directed to the main data center region. All GET and CACHED requess (black lines) are directed regional data centers. 
+
+Geographically distant web servers add latency and degrade the shopping experience. Such mistakes can prove costly, resulting in lost customers, missed revenue, and reputational damage.
+
+Route your traffic to your regional Magento Servers based on the user's location.
+When you use geolocation routing, you can localize your web store and present some or all of your websites in the language of your users. You can also use geolocation routing to restrict access to the websites to only the locations you have distribution rights. Another use case is balancing load across endpoints.
+
+Can you imagine your USA-based customers' frustration when your servers are located in Norway 🇳🇴 or Australia 🇦🇺?
 
 ## Pre-requirements
 
