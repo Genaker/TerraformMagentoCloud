@@ -8,6 +8,15 @@ Leveraging your own AWS Account dramatically reduces your monthly spend vs. payi
 
 This script is not limited to Magento deployments and can be used with any eCommerce/Web platform, eg. WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP (Custum Private APP cloud), VueStorefront, Silyus, Oddo, ORO etc. It includes Magento in the name because it was designed for Magento at first. There are however projects using it to run Enterprise Java applications with auto scaling.
 
+# Important!!!
+
+Magento Software installation is out of the scope of this Project. This Repository just an example of the AWS infrastructure provisioning for Magento using Terraform. To Install Magento 2 on Centos 8 or AWS Linux 2 x86/ARM Linux use our another project: 
+
+**Magento 2 Installation Automation (Centos 8.2, AWS linux with ARM support) GitHub repository:**
+[Magento installation Script] (https://github.com/Genaker/Magento-AWS-Linux-2-Instalation).
+
+Graviton 2 ARM instances are also supported. 
+
 # Why Auoto Scaling 
 
 Increasing the number of PHP-FPM processes beyond the number of physical processor cores does not improve the performance, rather is likely to degrade it, and can consume resources needlessly. Basic rule for the web is:
@@ -450,7 +459,7 @@ A “golden AMI” or “gold image” is an Magento AMI you standardize through
 
 You can launch an instance from an existing AMI, customize the instance, setup Software (Magento, ODDO, Wordpress, Shopware etc.) and then save this updated configuration as a custom AMI. Instances launched from this new custom AMI include the customizations that you made when you created the AMI.
 
-# Magento 2 Installation Automatio (Centos 8.2, AWS linux with ARM support) GitHub reposetory:
+# Magento 2 Installation Automation (Centos 8.2, AWS linux with ARM support) GitHub reposetory:
 
 [Magento installation Script] (https://github.com/Genaker/Magento-AWS-Linux-2-Instalation).
 
