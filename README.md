@@ -8,6 +8,8 @@ Leveraging your own AWS Account dramatically reduces your monthly spend vs. payi
 
 This script is not limited to Magento deployments and can be used with any eCommerce/Web platform, eg. WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP (Custum Private APP cloud), VueStorefront, Silyus, Oddo, ORO etc. It includes Magento in the name because it was designed for Magento at first. There are however projects using it to run Enterprise Java applications with auto scaling.
 
+If you have any questions feel free to send me an email – yegorshytikov@gmail.com
+
 # Important!!!
 
 Magento Software installation is out of the scope of this Project. This Repository just an example of the AWS infrastructure provisioning for Magento using Terraform. To Install Magento 2 on Centos 8 or AWS Linux 2 x86/ARM Linux use our another project: 
@@ -16,6 +18,7 @@ Magento Software installation is out of the scope of this Project. This Reposito
 [Magento installation Script] (https://github.com/Genaker/Magento-AWS-Linux-2-Instalation).
 
 Graviton 2 ARM instances are also supported. 
+
 
 # Why Auoto Scaling 
 
