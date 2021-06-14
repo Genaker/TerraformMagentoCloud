@@ -1,8 +1,8 @@
-project: tsm-staging-web
+project: staging-web
 
 # Configuration by region
 region:
-  eu-central-1:                # Set you region
+  us-west-1:                # Set you region
     ssh_key_name: "magento-staging" # You need create ssh key for all instance in your cloud except bastion
 
     vpc:
