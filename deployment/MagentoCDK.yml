@@ -1,0 +1,111 @@
+project: tsm-staging-web
+
+# Configuration by region
+region:
+  eu-central-1:                # Set you region
+    ssh_key_name: "magento-staging" # You need create ssh key for all instance in your cloud except bastion
+
+    vpc:
+      id: "VPC"
+
+    bastion_instance:         # not required
+      id: "Bastion"
+      public_ssh_keys:        # not required
+        - "ssh-rsa AAAAB3"
+        - "ssh-rsa AAAAB3Nz"
+      tags: # not required
+        - key: environment
+          value: staging
+
+    service:
+      web:
+        id: "web"             # First auto_scaling_group connect to load balancer
+        min_capacity: 1
+        max_capacity: 10
+        cpu_utilization: 50   # not required
+        monitoring_time: 300
+        # https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-simple-step.html?fbclid=IwAR3Jp4IWHvVijRi9YJowA9jzLvaNo1Tql35yoobzzXSMnwNUWPT8RDCWjcM
+        step_scaling:         # not required
+          - {"upper": 10, "change": -1}
+          - {"lower": 33, "change": +1}
+          - {"lower": 55, "change": +2}
+        image: "ami-0f7924e9a7ee0f576" # image in current region
+        disk:                   # not required
+          # https://docs.aws.amazon.com/en_us/AWSEC2/latest/UserGuide/device_naming.html
+          mapping: "/dev/xvda"
+          size: 25
+        instance:
+          class: "COMPUTE5"     # https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InstanceClass.html
+          size:  "XLARGE"       # https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InstanceSize.html
+        tags: # not required
+          - key: environment
+            value: staging
+
+      admin:
+        id: "admin"             # First auto_scaling_group connect to load balancer
+        url: "/admin_6i7itp/*"
+        min_capacity: 1
+        max_capacity: 1
+        cpu_utilization: 60
+        monitoring_time: 300
+        image: "ami-0f7924e9a7ee0f576" # image in current region
+        disk: # not required
+          # https://docs.aws.amazon.com/en_us/AWSEC2/latest/UserGuide/device_naming.html
+          mapping: "/dev/xvda"
+          size: 20
+        instance:
+          class: "BURSTABLE3"   # https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InstanceClass.html
+          size:  "MEDIUM"       # https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InstanceSize.html
+        tags: # not required
+          - key: environment
+            value: staging
+
+    db_instance:              # not required
+      id: "DB"
+      master_username: $DB_USERNAME
+      user_password:   $DB_PASSWORD
+      database_name:   $DB_NAME
+      removal_policy:  "DESTROY"   # not required  # https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_core.RemovalPolicy.html
+      deletion_protection: no      # not required default yes
+      instance:
+        class: "MEMORY6_GRAVITON"
+        size:  "LARGE"
+      tags: # not required
+        - key: environment
+          value: staging
+
+    cache_cluster:            # not required
+      id: "Redis"
+      # https://docs.aws.amazon.com/en_us/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-cache-cluster.html#cfn-elasticache-cachecluster-cachenodetype
+      instance: "cache.r6g.large"
+      tags: # not required
+        - key: environment
+          value: staging
+
+    efs:                      # not required
+      - id: "etc"
+        mount_point: "/var/www/html/magento/src/app/etc/"
+        tags: # not required
+          - key: environment
+            value: staging
+          - key: folder
+            value: etc
+      - id: "media"
+        mount_point: "/var/www/html/magento/src/pub/media/"
+        tags: # not required
+          - key: environment
+            value: staging
+          - key: folder
+            value: media
+
+    search:
+      id: "ELSearch"
+      version: "6.8"
+      # https://docs.aws.amazon.com/en_us/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html
+      instance: "m5.large.elasticsearch"
+      tags: # not required
+        - key: environment
+          value: staging
+
+    imagebuilder:
+      id: "ImageBuilder"
