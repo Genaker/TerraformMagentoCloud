@@ -20,7 +20,7 @@ Magento Software installation is out of the scope of this Project. This Reposito
 Graviton 2 ARM instances are also supported. 
 
 
-# Why Auoto Scaling 
+# Why Auto Scaling 
 
 Increasing the number of PHP-FPM processes beyond the number of physical processor cores does not improve the performance, rather is likely to degrade it, and can consume resources needlessly. Basic rule for the web is:
 
