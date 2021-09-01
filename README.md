@@ -226,7 +226,7 @@ Also consider setting the TERRAGRUNT_DOWNLOAD environment variable if you wish t
 
 # Destroy Terragrunt Magento Infrastructure 
 ```
-terraform destroy-all 
+terragrunt destroy-all 
 ```
 Infrastructure managed by Terraform will be destroyed. This will ask for confirmation before destroying.
 
