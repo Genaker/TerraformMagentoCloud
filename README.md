@@ -371,7 +371,7 @@ And also Magento Cloud provisioning Using AWS CDK. Comming soon ...
 +-----------------------------------------+-------------------------------------------+
 ```
 *Magento Cloud introduces: 
-OVERAGE FEES for the Compute Overage usage (per vCPU day): ~$3.80/vCPU-day when a raw AWS vCPU cost is less than 1$ per day. 
+OVERAGE FEES for the Compute Overage usage (per vCPU day): ~$X(price of the Commerce Cloud is Adore Secret)/vCPU-day when a raw AWS vCPU cost is less than 1$ per day. 
 
 From the Magento Cloud Agremment: 
 
