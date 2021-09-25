@@ -191,7 +191,7 @@ See [official Terragrunt documentation](https://github.com/gruntwork-io/terragru
 <img alt="Magento AWS Cloud" src="https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png" width="50%" height="50%">
 </a>
 
-or click url: (https://www.youtube.com/watch?v=kmnlrXSTQlM)
+or click the url to see the video: (https://www.youtube.com/watch?v=kmnlrXSTQlM)
 
 Architecting your Magento platform to grow with your business can sometimes be a challenge. This video walks through the steps needed to take an out-of-the-box, single-node Magento implementation and turn it into a highly available, elastic, and robust deployment. This includes an end-to-end caching strategy that provides an efficient front-end cache (including populated shopping carts) using Varnish on Amazon EC2 as well as offloading the Magento caches to separate infrastructure such as [https://aws.amazon.com/elasticache/](Amazon ElastiCache). We also look at strategies to manage the Magento Media library outside of the application instances, including [https://aws.amazon.com/efs/](EFS shared storage solutions).
 
