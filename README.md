@@ -551,3 +551,11 @@ If you have any questions feel free to send me an email – yegorshytikov@gmail.
 Terraform AWS moules maintained by [Anton Babenko](https://github.com/antonbabenko)
 
 All content, including [Terraform AWS modules](https://github.com/terraform-aws-modules/) used in these configurations, is released under the MIT License. 
+
+# Good news for the Magento Terraform Comunity 
+
+Terragrunt issue with use modules from Terraform Registry is resolved now we can use many other modules! 
+https://github.com/gruntwork-io/terragrunt/issues/311
+
+Terragrunt 31.5 release: Added support for fetching modules from any Terraform Registry using the new tfr:// protocol syntax for the source attribute. See the updated docs on source for more details.
+
