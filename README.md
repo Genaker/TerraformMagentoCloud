@@ -234,6 +234,31 @@ Turn on debug when you need do troubleshooting.
 TF_LOG=DEBUG terragrunt <command>
 ```
 
+In the new versions of the terragrunt use:
+```
+terragrunt run-all apply --terragrunt-log-level debug --terragrunt-debug
+```
+
+Terragrunt and Terraform usually play well together in helping you write DRY, re-usable infrastructure. But how do we figure out what went wrong in the rare case that they don’t play well?
+
+Terragrunt provides a way to configure logging level through the --terragrunt-log-level command flag. Additionally, Terragrunt provides --terragrunt-debug, that can be used to generate terragrunt-debug.tfvars.json.
+
+For example you could use it like this to debug an apply that’s producing unexpected output:
+
+```
+$ terragrunt apply --terragrunt-log-level debug --terragrunt-debug
+```
+
+Running this command will do two things for you:
+
+Output a file named terragrunt-debug.tfvars.json to your terragrunt working directory (the same one containing your terragrunt.hcl)
+Print instructions on how to invoke terraform against the generated file to reproduce exactly the same terraform output as you saw when invoking terragrunt. This will help you to determine where the problem’s root cause lies.
+Using those features is helpful when you want determine which of these three major areas is the root cause of your problem:
+
+Misconfiguration of your infrastructure code.
+ - An error in terragrunt.
+ - An error in terraform.
+
 # Clearing the Terragrunt cache
 
 Terragrunt creates a .terragrunt-cache folder in the current working directory as its scratch directory. It downloads your remote Terraform configurations into this folder, runs your Terraform commands in this folder, and any modules and providers those commands download also get stored in this folder. You can safely delete this folder any time and Terragrunt will recreate it as necessary.
