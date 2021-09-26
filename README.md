@@ -172,6 +172,14 @@ Step 1. Set credentials. By default, access credentials to AWS account should be
 ```
 Alternatively, you can edit `common/main_providers.tf` and use another authentication mechanism as described in the [AWS provider documentation](https://www.terraform.io/docs/providers/aws/index.html#authentication).
 
+The AWS provider offers a flexible means of providing credentials for authentication. The following methods are supported, in this order, and explained below:
+
+Static credentials
+Environment variables
+Shared credentials/configuration file
+CodeBuild, ECS, and EKS Roles
+EC2 Instance Metadata Service (IMDS and IMDSv2)
+
 Step 2. Once all arguments are set, run this command to create infrastructure in all layers in a single region:
 
     $ cd production
