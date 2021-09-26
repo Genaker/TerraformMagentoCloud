@@ -167,8 +167,8 @@ Git+SSH is used because it works for both public and private repositories.
 Step 1. Set credentials. By default, access credentials to AWS account should be set using environment variables:
 ```
      export AWS_DEFAULT_REGION=us-west-1 ## change it to your preferable AWS region
-     export AWS_ACCESS_KEY_ID=...
-     export AWS_SECRET_ACCESS_KEY=...
+     export AWS_ACCESS_KEY_ID="..."
+     export AWS_SECRET_ACCESS_KEY="..."
 ```
 Alternatively, you can edit `common/main_providers.tf` and use another authentication mechanism as described in the [AWS provider documentation](https://www.terraform.io/docs/providers/aws/index.html#authentication).
 
@@ -191,6 +191,24 @@ Alternatively, you can create infrastructure in a single layer (eg, `autoscaling
     $ terragrunt apply
 
 See [official Terragrunt documentation](https://github.com/gruntwork-io/terragrunt/blob/master/README.md) for all available commands and features.
+
+If you are using newver version of the terragrunt you shuld use :
+
+- **Region as a whole (slower&complete).** Run this command to create infrastructure in all layers in a single region:
+
+```
+$ cd ap-southeast-1
+$ terragrunt run-all apply
+```
+
+- **As a single layer (faster&granular).** Run this command to create infrastructure in a single layer (eg, `magento_auto_scaling`):
+
+```
+$ cd ap-southeast-1/magento_auto_scaling
+$ terragrunt apply
+```
+
+After the confirmation your infrastructure should be created.
 
 
 # Demo video showing how it works (click on image)
