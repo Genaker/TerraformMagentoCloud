@@ -39,7 +39,7 @@ There are two ways to manage infrastructure (slower&complete, or faster&granular
 - **Region as a whole (slower&complete).** Run this command to create infrastructure in all layers in a single region:
 
 ```
-$ cd ap-southeast-1
+$ cd region
 $ terragrunt run-all apply
 ```
 
