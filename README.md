@@ -1,3 +1,7 @@
+# Minimal Magento Cloud Infrastructure 
+
+![Minimal Magento Cloud Infrastructure](https://user-images.githubusercontent.com/9213670/134857584-7771a2ec-73d1-45d0-858f-d628c13e21b9.png)
+
 ## Quick start
 
 1. [Install Terraform 0.15 or newer](https://learn.hashicorp.com/tutorials/terraform/install-cli)
