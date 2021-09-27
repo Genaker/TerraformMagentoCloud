@@ -1,6 +1,6 @@
 ## run as a super user
 export TERRAFORM_VERSION=1.0.7 \
-&& export TERRAGRUNT_VERSION=0.31.11 \
+&& export TERRAGRUNT_VERSION=0.32.4 \
 && mkdir -p /ci/terraform_${TERRAFORM_VERSION} \
 && wget -nv -O /ci/terraform_${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
 && unzip /ci/terraform_${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /ci/terraform_${TERRAFORM_VERSION}/ \
