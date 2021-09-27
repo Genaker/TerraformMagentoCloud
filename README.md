@@ -219,6 +219,17 @@ $ terragrunt apply
 
 After the confirmation your infrastructure should be created.
 
+## Destroy infrastructure
+
+**destroy-all** (DEPRECATED: use run-all)
+DEPRECATED: Use **run-all destroy** instead.
+
+```
+ terragrunt run-all destroy
+```
+
+Destroy a ‘stack’ by running ‘terragrunt destroy’ in each subfolder.
+
 
 # Demo video showing how it works (click on image)
 
