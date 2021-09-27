@@ -12,9 +12,9 @@ If you have any questions feel free to send me an email – yegorshytikov@gmail.
 
 # Important!!!
 
-Magento Software installation is out of the scope of this Project. This Repository just an example of the AWS infrastructure provisioning for Magento using Terraform. To Install Magento 2 on Centos 8 or AWS Linux 2 x86/ARM Linux use our another project: 
+Magento Software installation is out of the scope of this Project. This Repository is just an example of the AWS infrastructure provisioning for Magento using Terraform. Please refer to our another project to Install Magento 2 on Centos 8 or Amazon Linux 2 x86/ARM Linux: 
 
-**Magento 2 Installation Automation (Centos 8.2, AWS linux with ARM support) GitHub repository:**
+**Magento 2 Installation Automation (Centos 8.2, Amazon Linux 2 with ARM support) GitHub repository:**
 [Magento installation Script] (https://github.com/Genaker/Magento-AWS-Linux-2-Instalation).
 
 Graviton 2 ARM instances are also supported. 
@@ -22,21 +22,21 @@ Graviton 2 ARM instances are also supported.
 
 # Why Auto Scaling 
 
-Increasing the number of PHP-FPM processes beyond the number of physical processor cores does not improve the performance, rather is likely to degrade it, and can consume resources needlessly. Basic rule for the web is:
+Increasing the number of PHP-FPM processes beyond the number of physical processor cores does not improve performance, rather is likely to degrade it, and can consume resources needlessly. Basic rule for the web is:
 
 CPU(physical) = (Concurrent HTTP REquest * http_req_duration)
 
-Be careful Intel CPUs are virtual and actual number of CPUs factor = 2; Graviton AWS ARM64 CPUS have factor 1 and are better for concurrent request processing. 
-Intel CPUs have some advantages of 20-30% in some cases, however for magento (long heavy queries) physical cores are better. With higher trafic you need more CPUs.
+Be careful Intel CPUs are virtual and actual number of CPUs factor = 2; AWS Graviton2 ARM64 CPUs have factor 1 and are better for concurrent request processing. 
+Intel CPUs have some advantages of 20-30% in some cases, however for magento (long heavy queries) physical cores are better. With higher traffic you need more CPUs.
 It is rule for uncached pages.  
 
-With Varnish/FPC it is the same. However Varnish has response time ~ 1ms and a single instance CPU can return 1000 caches pages per sec. To avoid unpredictable results with the cache invalidation, misses, uncached checkouts, cart, AJAXs, API the BEST practices is to measure performance without FPC. FPC is a bonus.
+With Varnish/FPC it is the same. However Varnish has ~1ms response time and a single instance CPU can return 1000 caches pages per sec. To avoid unpredictable results with the cache invalidation, misses, uncached checkouts, cart, AJAXs, API the BEST practice is to measure performance without FPC. FPC is a bonus.
 
 
 ## AWS Magento 2 Cloud Features:
 * True Horizontal Auto Scaling 
 * Affordable (starting from ~300$ for us-west-2 region)
-* MySQL RDS scalable Managed by Amazon, multi az failover, vertical scaling without downtime
+* MySQL RDS scalable Managed by Amazon, multi-az failover, vertical scaling with no downtime
 * Compatible with RDS Aurora Cluster and Aurora Serverless
 * EFS - Fully managed elastic NFS for media and configuration storage
 * CloudFront CDN for static and media served from different origins S3 or Magento(EFS) as second origin 
@@ -47,7 +47,7 @@ With Varnish/FPC it is the same. However Varnish has response time ~ 1ms and a s
 * Bastion host to provide Secure Shell (SSH) access to the Magento web servers. 
 * Appropriate security groups for each instance or function to restrict access to only necessary protocols and ports.
 * Private Public Subnets - NAT gateway, Bastion server
-* All servers and Database are hosted in private Network securely
+* All servers and Database are securely hosted in private Network
 * System and Software Update Patches
 * DDoS Protection with AWS Shield
 * PCI compliant infrastructure
@@ -69,7 +69,7 @@ With Varnish/FPC it is the same. However Varnish has response time ~ 1ms and a s
 * Simple and Step Scaling Policies - choose scaling metrics that trigger horizontal scaling
 * Manual Scaling for Magento Auto Scaling Group (ASG)
 * AWS Command Line Interface (CLI) - tool to manage your AWS services. You can control multiple AWS services from the command line and automate them through scripts.
-* DynamoDb for logs, indexes, analytics
+* DynamoDB for logs, indexes, analytics
 * Lambda functions as targets for a load balancer
 * Elastic Container Registry (ECR) - fully-managed Docker container registry that makes it easy to store, manage, and deploy Docker container images!
 * You can use Amazon Elastic Container Service (ECS) instead of ASG with Service Auto Scaling to adjust running containers desired count automatically.
@@ -100,9 +100,9 @@ Sources of the small infrastructure located in the separate branch-> https://git
 
 # Magento 2 Multi Regional Infastructure Support 
 
-We have a global scale-out model. All data updates (POST, DELETE request) are directed to the main data center region. All GET and CACHED requess (black lines) are directed regional data centers. 
+We have a global scale-out model. All data updates (POST, DELETE request) are directed to the main data center region. All GET and CACHED requests (black lines) are routed to regional data centers. 
 
-Geographically distant web servers add latency and degrade the shopping experience. Such mistakes can prove costly, resulting in lost customers, missed revenue, and reputational damage.
+Geographically remote web servers add latency and degrade the shopping experience. Such mistakes can prove costly, resulting in lost customers, missed revenue, and reputational damage.
 
 Route your traffic to your regional Magento Servers based on the user's location.
 When you use geolocation routing, you can localize your web store and present some or all of your websites in the language of your users. You can also use geolocation routing to restrict access to the websites to only the locations you have distribution rights. Another use case is balancing load across endpoints.
@@ -201,7 +201,7 @@ Alternatively, you can create infrastructure in a single layer (eg, `autoscaling
 
 See [official Terragrunt documentation](https://github.com/gruntwork-io/terragrunt/blob/master/README.md) for all available commands and features.
 
-If you are using newver version of the terragrunt you shuld use :
+If you are using newer version of the terragrunt you should use :
 
 - **Region as a whole (slower&complete).** Run this command to create infrastructure in all layers in a single region:
 
@@ -260,7 +260,7 @@ $ terragrunt apply --terragrunt-log-level debug --terragrunt-debug
 
 Running this command will do two things for you:
 
-Output a file named terragrunt-debug.tfvars.json to your terragrunt working directory (the same one containing your terragrunt.hcl)
+Output a file named terragrunt-debug.tfvars.json to your terragrunt working directory (the same one containing your terragrunt.hcl).
 Print instructions on how to invoke terraform against the generated file to reproduce exactly the same terraform output as you saw when invoking terragrunt. This will help you to determine where the problem’s root cause lies.
 Using those features is helpful when you want determine which of these three major areas is the root cause of your problem:
 
@@ -299,9 +299,9 @@ The -target flag, instead of affecting "dependencies" will instead also destroy 
 The behavior of any terraform destroy command can be previewed at any time with an equivalent `terraform plan -destroy` command.
 
 
-# Production staging environments 
+# Production & staging environments 
 
-You can copy/paste folders to create new environments. Consider the following file structure, which defines three magento environments (prod, project-3 and stage) with the same infrastructure in each one (an app, a MySQL database, and a VPC):
+You can copy/paste folders to create new environments. Consider the following files structure, which defines three magento environments (prod, project-3 and stage) with the same infrastructure in each one (an app, a MySQL database, and a VPC):
 ```
 └── magento
     ├── prod
@@ -352,13 +352,13 @@ Now you can define your backend configuration just once in the root terragrunt.h
 
 # Multi cloud deployments 
 
-Terraform provides Magento 2 Open Source Cloud infrastructure as a code approach to the provision and manage any cloud (AWS, GoogleCloud, Azure, Alibaba, or other types of services such as Kubernetes).
+Terraform provides Magento 2 Open Source Cloud infrastructure as a code approach to provision and manage any cloud (AWS, GoogleCloud, Azure, Alibaba, or other types of services such as Kubernetes).
 
 Terraform can manage popular service providers, such as AWS, GCP, Micosoft Azure, Alibaba Cloud, and VMware, as well as custom in-house and on-premises solutions.
 
 ## Enterprise Support/Installation/Development Package available.
 Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services/support for businesses based on this Open Source project.
-Nowerdays this project has 10+ partners. 
+This project currently has 10+ partners. 
 If you are willing to be listed as cloud service provider feel free message me.
 
 
@@ -367,7 +367,7 @@ More information: yegorshytikov@gmail.com
 I also have Ansible Magento Cloud provisioning implementation:
 https://github.com/Genaker/AWS_Magento2_Ansible
 
-And also Magento Cloud provisioning Using AWS CDK. Comming soon ...
+And also Magento Cloud provisioning Using AWS CDK. Coming soon ...
 
 
 # Approximate Magento 2 AWS Cloud infrastructure Cost
@@ -419,7 +419,7 @@ And also Magento Cloud provisioning Using AWS CDK. Comming soon ...
 +-----------------------------------------+-------------------------------------------+
 | Works only with Enterprise version M2   | Works with any version of Magento 1/2     |
 +-----------------------------------------+-------------------------------------------+
-| Expansive $2000-$10000 month * +        | Paying only for AWS resources you used,   |
+| Expensive $2000-$10000 month * +        | Paying only for AWS resources you used,   |
 | Enterprise license                      | starting from 300$ months                 |
 +-----------------------------------------+-------------------------------------------+
 | Not Customizable                        | Fully Customizeble                        |
@@ -437,7 +437,7 @@ From the Magento Cloud Agremment:
 
 Magento Cloud Customer hereby authorizes Magento, if applicable, to charge its credit card or other payment instrument or Subscription Fees, Overage Fees and/or any upgrades to the Services ordered, and any applicable taxes in arrears or at time of order, as the case may be.
 
-Becouse of the bad Magento Cloud Architecture and performace you cloud HIDDEN OVERAGE FEES can be more then a Contract price. 
+Because of the bad Magento Cloud Architecture and performace you cloud HIDDEN OVERAGE FEES can be more then a Contract price. 
 
 
 # Basic Deployment With CodeDeploy Example 
@@ -612,7 +612,7 @@ Terraform AWS moules maintained by [Anton Babenko](https://github.com/antonbaben
 
 All content, including [Terraform AWS modules](https://github.com/terraform-aws-modules/) used in these configurations, is released under the MIT License. 
 
-# Good news for the Magento Terraform Comunity 
+# Good news for the Magento Terraform Community 
 
 Terragrunt issue with use modules from Terraform Registry is resolved now we can use many other modules! 
 https://github.com/gruntwork-io/terragrunt/issues/311
