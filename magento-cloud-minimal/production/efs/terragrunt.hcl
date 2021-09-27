@@ -40,13 +40,23 @@ inputs = {
   # type: string
   vpc_id = dependency.magento_vpc.outputs.vpc_id
   
-  namespace       = "efs"
-  stage           = "magento"
-  region          = local.aws_region
-  efs_vpc_id      = dependency.magento_vpc.outputs.vpc_id
-  subnets         = dependency.magento_vpc.outputs.public_subnets
-  security_groups = [dependency.web_nodes_security.outputs.security_group_id]
-
+  # ID element. Usually an abbreviation of your organization name,
+  # e.g. 'eg' or 'cp', to help ensure generated IDs are globally unique
+  namespace = "efs"
   
+  # ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release'
+  stage = "magento"
+  
+  # AWS Region	
+  region = local.aws_region
+  
+  # VPS
+  efs_vpc_id = dependency.magento_vpc.outputs.vpc_id
+  
+  # Subnets
+  subnets = dependency.magento_vpc.outputs.public_subnets
+  
+  # Security Groups 
+  security_groups = [dependency.web_nodes_security.outputs.security_group_id]
 }
 
