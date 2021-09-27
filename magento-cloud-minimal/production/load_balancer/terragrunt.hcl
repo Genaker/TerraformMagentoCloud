@@ -29,20 +29,25 @@ inputs = {
   
   logging_enabled = false
    
+  # A list of subnet IDs to attach to the ELB
   subnets = dependency.magento_vpc.outputs.public_subnets
   
-  internal        = false
+  # If true, ELB will be an internal ELB
+  internal = false
   
+  # A list of security group IDs to assign to the ELB
   security_groups = [dependency.load_balancer_security.outputs.security_group_id]
   
+  # AWS VPC
   vpc_id = dependency.magento_vpc.outputs.vpc_id
   
+  # A list of listener blocks	
   listener = [
     {
-      instance_port     = 80
+      instance_port = 80
       instance_protocol = "HTTP"
-      lb_port           = 80
-      lb_protocol       = "HTTP"
+      lb_port = 80
+      lb_protocol = "HTTP"
     }
     #,
     #{
