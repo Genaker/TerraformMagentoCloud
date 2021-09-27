@@ -96,7 +96,7 @@ The [https://registry.terraform.io/](public Terraform registry) provides infrast
 The Minimal Magento Cloud infrastructure designed for small and extra large merchants. It can handle any load of up to 10,000 not cached requests per second(according to the internal test). Magento Commerce Cloud can’t handle even 100 simultaneous requests. Also, it dramatically reduces management overhead and cost.
 After fixes in the Magento Fork Varnish is the redundant solution for 98% of the merchants and is not the best practice anymore.  
 
-Sources of the small infrastructure located in the separate branch: [will be published soon]
+Sources of the small infrastructure located in the separate branch-> https://github.com/Genaker/TerraformMagentoCloud/tree/minimal
 
 # Magento 2 Multi Regional Infastructure Support 
 
