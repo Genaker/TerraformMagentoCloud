@@ -89,6 +89,15 @@ The [https://registry.terraform.io/](public Terraform registry) provides infrast
 
 [Terragrunt](https://github.com/gruntwork-io/terragrunt) is used to work with Terraform configurations which allows you to orchestrate dependent layers, update arguments dynamically and keep configurations. Define Terraform code once, no matter how many environments you have ([DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)).
 
+# Minimal Magento Cloud Terraform Infrastructure 
+
+![Magento Cloud minimal Infrastructure](https://user-images.githubusercontent.com/9213670/134853837-0a3a3a48-734c-4da2-b1e8-fa19af93551c.png)
+
+The Minimal Magento Cloud infrastructure designed for small and extra large merchants. It can handle any load of up to 10,000 not cached requests per second(according to the internal test). Magento Commerce Cloud can’t handle even 100 simultaneous requests. Also, it dramatically reduces management overhead and cost.
+After fixes in the Magento Fork Varnish is the redundant solution for 98% of the merchants and is not the best practice anymore.  
+
+Sources of the small infrastructure located in the separate branch: [will be published soon]
+
 # Magento 2 Multi Regional Infastructure Support 
 
 We have a global scale-out model. All data updates (POST, DELETE request) are directed to the main data center region. All GET and CACHED requess (black lines) are directed regional data centers. 
