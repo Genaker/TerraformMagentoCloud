@@ -14,9 +14,9 @@
 1. Optionally, [install pre-commit hooks](https://pre-commit.com/#install) to keep Terraform formatting and documentation up-to-date.
 
 If you are using macOS you can install all dependencies using [Homebrew](https://brew.sh/):
-
+```
     $ brew install terraform terragrunt pre-commit
-
+```
 ## Configure access to AWS account
 
 The recommended way to configure access credentials to AWS account is using environment variables:
@@ -52,6 +52,16 @@ $ terragrunt apply
 
 After the confirmation your infrastructure should be created.
 
+## Destroy/Delete infrastructure
+
+**destroy-all** (DEPRECATED: use run-all)
+DEPRECATED: Use **run-all destroy** instead.
+
+```
+ terragrunt run-all destroy
+```
+
+Destroy a ‘stack’ by running ‘terragrunt destroy’ in each subfolder.
 
 ## References
 
