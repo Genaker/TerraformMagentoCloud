@@ -1,0 +1,31 @@
+- hosts: all
+  name: Magento Ansible Deploymant Playbook
+  gather_facts: False
+  strategy: free
+  tasks:
+    - name: Git Pull Deployment
+      shell: |
+        cd /var/www/html/magento
+        echo "Git Pull"
+        git pull -f
+        echo "Git Pull Finished"
+        echo "Magento Setup Upgrade"
+        php -d memory_limit=-1 /var/www/html/magento/bin/magento maintenance:enable
+        composer install
+        php -d memory_limit=-1 /var/www/html/magento/bin/magento setup:upgrade --keep-generated'
+        echo "Magento DI Compile"
+        php -d memory_limit=-1 /var/www/html/magento/bin/magento setup:di:compile'
+        echo "Magento Static Deploy"
+        php -d memory_limit=-1 /var/www/html/magento/bin/magento setup:static-content:deploy'
+        echo "Set Production Permissions"
+        chmod -R 777 /var/www/html/magento/
+        git config core.fileMode false
+        sudo service php-fpm restart
+        sudo service nginx restart
+        php -d memory_limit=-1 /var/www/html/magento/bin/magento maintenance:disable
+        service php-fpm restart
+        echo "Deployment Finished"
+      args:
+        chdir: /
+      register: output
+    - debug: var=output.stdout_lines
