@@ -17,6 +17,8 @@ Filters:
 hostnames:
   - ip-address
 ``` 
+About filters you can read here: 
+https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html#options
 
 **List Inventory**
 ```
