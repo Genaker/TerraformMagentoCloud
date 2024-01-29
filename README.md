@@ -526,8 +526,6 @@ aws deploy get-deployment --deployment-id $1 --query "deploymentInfo.[status, cr
 
 File 'config_files/scripts/afterInstall.bash' should run setup:upgrade --keep-generated, nginx, php-fpm restart and similar stuff
 
-Source (https://magento.stackexchange.com/questions/224198/magento-2-aws-automatic-codedeploy-via-github-webhook)
-
 ##How to Deploy With Docker 
 
 Just run command in your codeDeploy script 
@@ -536,6 +534,7 @@ Just run command in your codeDeploy script
 docker pull [OPTIONS] MAGENTO_IMAGE_NAME[:TAG|@DIGEST]
 
 ```
+Example of the deploy file: https://github.com/Genaker/TerraformMagentoCloud/blob/master/deploy.sh
 
 # Automate the installation of software using Golden AMI
 
