@@ -478,6 +478,7 @@ hooks:
           runas: mage_user
 ```
 
+# Magento 2 AWS Code Deploy script example
 Script to 'compile' magento on Deploy server - You pull and compile code to deploy server or build Docker container end after just push code to production using Code Deploy - fastest way 
 
 ```
