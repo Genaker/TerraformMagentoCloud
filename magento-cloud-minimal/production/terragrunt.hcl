@@ -54,16 +54,24 @@ remote_state {
     if_exists = "overwrite"
   }
 
-  config = {
-    encrypt        = true
-    region         = local.aws_region
-    key            = format("%s/terraform.tfstate", path_relative_to_include())
-    bucket         = local.use_localstack ? "localstack-terraform-state" : format("terraform-statess-%s", get_aws_account_id())
-    dynamodb_table = local.use_localstack ? "localstack-terraform-locks" : format("terraform-lockss-%s", get_aws_account_id())
+  config = merge(
+    {
+      encrypt        = true
+      region         = local.aws_region
+      key            = format("%s/terraform.tfstate", path_relative_to_include())
+      bucket         = local.use_localstack ? "localstack-terraform-state" : format("terraform-states-%s", get_aws_account_id())
+      dynamodb_table = local.use_localstack ? "localstack-terraform-locks" : format("terraform-locks-%s", get_aws_account_id())
 
-    skip_metadata_api_check     = true
-    skip_credentials_validation = false
-  }
+      skip_metadata_api_check     = true
+      skip_credentials_validation = local.use_localstack
+      skip_requesting_account_id  = local.use_localstack
+    },
+    local.use_localstack ? {
+      endpoint                    = local.localstack_endpoint
+      force_path_style            = true
+      skip_s3_checksum            = true
+    } : {}
+  )
 }
 
 generate "main_providers" {
@@ -74,10 +82,10 @@ provider "aws" {
   region = "${local.aws_region}"
 
   # Make it faster by skipping something
-  skip_get_ec2_platforms      = true
   skip_metadata_api_check     = true
   skip_region_validation      = true
-  skip_credentials_validation = true
+  skip_credentials_validation = ${local.use_localstack}
+  skip_requesting_account_id  = ${local.use_localstack}
 
   ${local.aws_s3_path_style}
   ${local.aws_endpoints_block}

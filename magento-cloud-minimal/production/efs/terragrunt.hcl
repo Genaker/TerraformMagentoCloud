@@ -3,7 +3,7 @@ locals {
 }
 
 terraform {
-  source = "git::git@github.com:cloudposse/terraform-aws-efs.git?ref=0.31.1"
+  source = "git::https://github.com/cloudposse/terraform-aws-efs.git?ref=1.8.0"
 }
 
 include {

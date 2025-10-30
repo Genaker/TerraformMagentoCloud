@@ -9,13 +9,28 @@
 
 ## Quick start
 
-1. [Install Terraform 0.15 or newer](https://learn.hashicorp.com/tutorials/terraform/install-cli)
-1. [Install Terragrunt 0.29 or newer](https://terragrunt.gruntwork.io/docs/getting-started/install/)
-1. Optionally, [install pre-commit hooks](https://pre-commit.com/#install) to keep Terraform formatting and documentation up-to-date.
+### Recommended Versions (2025)
+- **Terraform:** v1.13.4 or newer
+- **Terragrunt:** v0.92.1 or newer
+- **AWS Provider:** v6.x (auto-detected)
+
+### Installation Options
+
+**Option 1: Use Docker Image (Recommended)**
+```bash
+docker build -t tg-tf:local .
+# Image includes Terraform 1.13.4 + Terragrunt v0.92.1 + Go
+```
+
+**Option 2: Install Locally**
+
+1. [Install Terraform 1.13+](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+2. [Install Terragrunt 0.92+](https://terragrunt.gruntwork.io/docs/getting-started/install/)
+3. Optionally, [install pre-commit hooks](https://pre-commit.com/#install)
 
 If you are using macOS you can install all dependencies using [Homebrew](https://brew.sh/):
-```
-    $ brew install terraform terragrunt pre-commit
+```bash
+brew install terraform terragrunt pre-commit
 ```
 ## Configure access to AWS account
 
@@ -63,11 +78,28 @@ DEPRECATED: Use **run-all destroy** instead.
 
 Destroy a ‘stack’ by running ‘terragrunt destroy’ in each subfolder.
 
+## Module Versions (Updated 2025)
+
+This infrastructure uses the latest stable versions:
+
+| Module | Version | Source |
+|--------|---------|--------|
+| VPC | v5.16.0 | terraform-aws-modules/vpc |
+| RDS | v6.10.0 | terraform-aws-modules/rds |
+| Security Group | v5.2.0 | terraform-aws-modules/security-group |
+| Auto Scaling | v8.0.0 | terraform-aws-modules/autoscaling |
+| ALB | v9.11.0 | terraform-aws-modules/alb |
+| EFS | 1.8.0 | cloudposse/terraform-aws-efs |
+| ElastiCache Redis | 1.2.3 | cloudposse/terraform-aws-elasticache-redis |
+
+All module sources use **HTTPS URLs** (not SSH) for easier access without SSH keys.
+
 ## References
 
 * [Terraform documentation](https://www.terraform.io/docs/) and [Terragrunt documentation](https://terragrunt.gruntwork.io/docs/) for all available commands and features
 * [Terraform AWS modules](https://github.com/terraform-aws-modules/)
 * [Terraform modules registry](https://registry.terraform.io/)
 * [Terraform best practices](https://www.terraform-best-practices.com/)
+* [LocalStack for local testing](https://docs.localstack.cloud/)
 
 

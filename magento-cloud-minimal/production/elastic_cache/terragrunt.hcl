@@ -3,7 +3,7 @@ locals {
 }
 
 terraform {
-  source = "git::git@github.com:cloudposse/terraform-aws-elasticache-redis.git"
+  source = "git::https://github.com/cloudposse/terraform-aws-elasticache-redis.git?ref=1.2.3"
 }
 
 include {

@@ -1,34 +1,99 @@
-he docker file andt# Local testing with Terragrunt + Terraform + LocalStack
+# Local Testing with Terragrunt + Terraform + LocalStack
 
-This guide shows how to run plans/applies locally against LocalStack using a Docker image that contains Terraform and Terragrunt. It does not change behavior for real AWS runs.
+This guide shows how to run plans/applies locally against LocalStack using a Docker image that contains Terraform and Terragrunt.
+
+## ✅ Updated Versions (2025)
+- **Terraform:** v1.13.4 (latest stable)
+- **Terragrunt:** v0.92.1 (latest stable)  
+- **AWS Provider:** v6.18.0 (auto-detected)
+- **Go:** 1.24.9
 
 ## Prerequisites
-- Docker Desktop running
-- LocalStack running on your host
-  - Default port: `4566`
-  - If LocalStack uses a different port (e.g., `4567`), set `LOCALSTACK_ENDPOINT` accordingly
+1. Docker Desktop running
+2. LocalStack (optional for local testing)
+   - Default port: `4566`
+   - If using a different port, update `LOCALSTACK_ENDPOINT`
 
-## Build the tools image (once)
+## Quick Start
+
+### 1. Build the Docker Image (once)
+
+**Linux/macOS:**
+```bash
+cd /home/yehor/TerraformMagentoCloud
+docker build -t tg-tf:local .
+```
+
+**Windows PowerShell:**
 ```powershell
 cd C:\Users\<YOUR_USER>\TerraformMagentoCloud
 docker build -t tg-tf:local .
 ```
 
-## Environment variables (PowerShell)
+### 2. Start LocalStack (for local testing)
+
+```bash
+docker run -d --name localstack -p 4566:4566 localstack/localstack:latest
+```
+
+Wait 10 seconds for LocalStack to initialize, then create the S3 bucket:
+```bash
+docker run --rm \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  --entrypoint aws \
+  amazon/aws-cli \
+  --endpoint-url=http://host.docker.internal:4566 \
+  s3 mb s3://localstack-terraform-state
+```
+
+### 3. Test Infrastructure
+
+**Linux/macOS - Set Environment Variables:**
+```bash
+export USE_LOCALSTACK=true
+export LOCALSTACK_ENDPOINT=http://host.docker.internal:4566
+export AWS_ACCESS_KEY_ID=test
+export AWS_SECRET_ACCESS_KEY=test
+export AWS_DEFAULT_REGION=ap-southeast-1
+export TG_NON_INTERACTIVE=true
+```
+
+**Windows PowerShell:**
 ```powershell
 $env:USE_LOCALSTACK = "true"
+$env:LOCALSTACK_ENDPOINT = "http://host.docker.internal:4566"
 $env:AWS_ACCESS_KEY_ID = "test"
 $env:AWS_SECRET_ACCESS_KEY = "test"
 $env:AWS_DEFAULT_REGION = "ap-southeast-1"
-$env:TERRAGRUNT_DISABLE_INIT = "true"
-# Change this if LocalStack uses a non-default port
-$env:LOCALSTACK_ENDPOINT = "http://host.docker.internal:4566"
+$env:TG_NON_INTERACTIVE = "true"
 ```
 
-## Plan/apply a single module (example: production/aws-data)
-Plan:
+## Working with Individual Modules
+
+### Validate a Module
+
+**Linux/macOS:**
+```bash
+cd /home/yehor/TerraformMagentoCloud
+
+docker run --rm \
+  -v ${PWD}:/work \
+  -w /work/magento-cloud-minimal/production/aws-data \
+  -e USE_LOCALSTACK=true \
+  -e LOCALSTACK_ENDPOINT=http://host.docker.internal:4566 \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  -e TG_NON_INTERACTIVE=true \
+  --entrypoint /bin/sh \
+  tg-tf:local -lc "terragrunt validate --no-color"
+```
+
+**Windows PowerShell:**
 ```powershell
-docker run --rm -it `
+docker run --rm `
   -v ${PWD}:/work `
   -w /work/magento-cloud-minimal/production/aws-data `
   --entrypoint /bin/sh `
@@ -37,13 +102,30 @@ docker run --rm -it `
   -e AWS_ACCESS_KEY_ID=$env:AWS_ACCESS_KEY_ID `
   -e AWS_SECRET_ACCESS_KEY=$env:AWS_SECRET_ACCESS_KEY `
   -e AWS_DEFAULT_REGION=$env:AWS_DEFAULT_REGION `
-  -e TERRAGRUNT_DISABLE_INIT=$env:TERRAGRUNT_DISABLE_INIT `
-  tg-tf:local -lc "set -e; mkdir -p /tmp/tf-cache; export TF_PLUGIN_CACHE_DIR=/tmp/tf-cache; export TF_CLI_ARGS_init='-backend=false -reconfigure'; rm -rf .terragrunt-cache; terragrunt plan -input=false -no-color"
+  -e TG_NON_INTERACTIVE=$env:TG_NON_INTERACTIVE `
+  tg-tf:local -lc "terragrunt validate --no-color"
 ```
 
-Apply:
+### Plan a Module
+
+**Linux/macOS:**
+```bash
+docker run --rm \
+  -v ${PWD}:/work \
+  -w /work/magento-cloud-minimal/production/aws-data \
+  -e USE_LOCALSTACK=true \
+  -e LOCALSTACK_ENDPOINT=http://host.docker.internal:4566 \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  -e TG_NON_INTERACTIVE=true \
+  --entrypoint /bin/sh \
+  tg-tf:local -lc "terragrunt plan -lock=false --no-color"
+```
+
+**Windows PowerShell:**
 ```powershell
-docker run --rm -it `
+docker run --rm `
   -v ${PWD}:/work `
   -w /work/magento-cloud-minimal/production/aws-data `
   --entrypoint /bin/sh `
@@ -52,103 +134,314 @@ docker run --rm -it `
   -e AWS_ACCESS_KEY_ID=$env:AWS_ACCESS_KEY_ID `
   -e AWS_SECRET_ACCESS_KEY=$env:AWS_SECRET_ACCESS_KEY `
   -e AWS_DEFAULT_REGION=$env:AWS_DEFAULT_REGION `
-  -e TERRAGRUNT_DISABLE_INIT=$env:TERRAGRUNT_DISABLE_INIT `
-  tg-tf:local -lc "set -e; mkdir -p /tmp/tf-cache; export TF_PLUGIN_CACHE_DIR=/tmp/tf-cache; export TF_CLI_ARGS_init='-backend=false -reconfigure'; terragrunt apply -auto-approve -input=false -no-color"
+  -e TG_NON_INTERACTIVE=$env:TG_NON_INTERACTIVE `
+  tg-tf:local -lc "terragrunt plan -lock=false --no-color"
 ```
 
-## Run-all across production
-Plan all:
+### Apply a Module
+
+**Linux/macOS:**
+```bash
+docker run --rm \
+  -v ${PWD}:/work \
+  -w /work/magento-cloud-minimal/production/aws-data \
+  -e USE_LOCALSTACK=true \
+  -e LOCALSTACK_ENDPOINT=http://host.docker.internal:4566 \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  -e TG_NON_INTERACTIVE=true \
+  --entrypoint /bin/sh \
+  tg-tf:local -lc "terragrunt apply -lock=false -auto-approve --no-color"
+```
+
+**Windows PowerShell:**
 ```powershell
-docker run --rm -it `
+docker run --rm `
   -v ${PWD}:/work `
-  -w /work/magento-cloud-minimal/production `
+  -w /work/magento-cloud-minimal/production/aws-data `
   --entrypoint /bin/sh `
   -e USE_LOCALSTACK=$env:USE_LOCALSTACK `
   -e LOCALSTACK_ENDPOINT=$env:LOCALSTACK_ENDPOINT `
   -e AWS_ACCESS_KEY_ID=$env:AWS_ACCESS_KEY_ID `
   -e AWS_SECRET_ACCESS_KEY=$env:AWS_SECRET_ACCESS_KEY `
   -e AWS_DEFAULT_REGION=$env:AWS_DEFAULT_REGION `
-  -e TERRAGRUNT_DISABLE_INIT=$env:TERRAGRUNT_DISABLE_INIT `
-  tg-tf:local -lc "set -e; mkdir -p /tmp/tf-cache; export TF_PLUGIN_CACHE_DIR=/tmp/tf-cache; export TF_CLI_ARGS_init='-backend=false -reconfigure'; rm -rf .terragrunt-cache; terragrunt run-all plan -input=false -no-color"
+  -e TG_NON_INTERACTIVE=$env:TG_NON_INTERACTIVE `
+  tg-tf:local -lc "terragrunt apply -lock=false -auto-approve --no-color"
 ```
 
-Apply all:
+## Deploy All Modules at Once
+
+**Linux/macOS:**
+```bash
+cd /home/yehor/TerraformMagentoCloud/magento-cloud-minimal/production
+
+# Validate all modules
+docker run --rm \
+  -v ${PWD}:/work \
+  -w /work \
+  -e USE_LOCALSTACK=true \
+  -e LOCALSTACK_ENDPOINT=http://host.docker.internal:4566 \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  -e TG_NON_INTERACTIVE=true \
+  --entrypoint /bin/sh \
+  tg-tf:local -lc "terragrunt run --all validate --no-color"
+
+# Plan all modules (see what will be created)
+docker run --rm \
+  -v ${PWD}:/work \
+  -w /work \
+  -e USE_LOCALSTACK=true \
+  -e LOCALSTACK_ENDPOINT=http://host.docker.internal:4566 \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  -e TG_NON_INTERACTIVE=true \
+  --entrypoint /bin/sh \
+  tg-tf:local -lc "terragrunt run --all -- plan -lock=false --no-color"
+
+# Apply all modules (create infrastructure)
+docker run --rm \
+  -v ${PWD}:/work \
+  -w /work \
+  -e USE_LOCALSTACK=true \
+  -e LOCALSTACK_ENDPOINT=http://host.docker.internal:4566 \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  -e TG_NON_INTERACTIVE=true \
+  --entrypoint /bin/sh \
+  tg-tf:local -lc "terragrunt run --all -- apply -lock=false -auto-approve --no-color"
+```
+
+**Windows PowerShell:**
 ```powershell
-docker run --rm -it `
+cd C:\Users\<YOUR_USER>\TerraformMagentoCloud\magento-cloud-minimal\production
+
+# Apply all modules
+docker run --rm `
   -v ${PWD}:/work `
-  -w /work/magento-cloud-minimal/production `
+  -w /work `
   --entrypoint /bin/sh `
   -e USE_LOCALSTACK=$env:USE_LOCALSTACK `
   -e LOCALSTACK_ENDPOINT=$env:LOCALSTACK_ENDPOINT `
   -e AWS_ACCESS_KEY_ID=$env:AWS_ACCESS_KEY_ID `
   -e AWS_SECRET_ACCESS_KEY=$env:AWS_SECRET_ACCESS_KEY `
   -e AWS_DEFAULT_REGION=$env:AWS_DEFAULT_REGION `
-  -e TERRAGRUNT_DISABLE_INIT=$env:TERRAGRUNT_DISABLE_INIT `
-  tg-tf:local -lc "set -e; mkdir -p /tmp/tf-cache; export TF_PLUGIN_CACHE_DIR=/tmp/tf-cache; export TF_CLI_ARGS_init='-backend=false -reconfigure'; terragrunt run-all apply -auto-approve -input=false -no-color"
+  -e TG_NON_INTERACTIVE=$env:TG_NON_INTERACTIVE `
+  tg-tf:local -lc "terragrunt run --all -- apply -lock=false -auto-approve --no-color"
 ```
 
-## Terratest (using the same tg-tf:local image)
-The tools image includes Go, so you can run tests from it directly.
+## Module Deployment Order
 
+The infrastructure has dependencies. Terragrunt automatically handles the order:
+
+```
+1. aws-data              # Base data sources
+2. magento_vpc           # VPC and networking
+3. db_security           # Database security group
+4. redis_security        # Redis security group  
+5. web_nodes_security    # Web nodes security group
+6. load_balancer_security # ALB security group
+7. mysql                 # RDS database
+8. elastic_cache         # Redis cache
+9. efs                   # Elastic File System
+10. load_balancer        # Application Load Balancer
+11. magento_auto_scaling # EC2 Auto Scaling Group
+```
+
+With `terragrunt run --all`, dependencies are automatically resolved in the correct order.
+
+### Alternative: Using Terragrunt Shortcuts
+
+According to the [Terragrunt documentation](https://terragrunt.gruntwork.io/docs/reference/cli/commands/run/), you can also use shortcuts:
+
+```bash
+# These are equivalent:
+terragrunt run --all -- plan
+terragrunt plan --all
+
+# These are equivalent:
+terragrunt run --all -- apply -auto-approve
+terragrunt apply --all -auto-approve
+
+# These are equivalent:
+terragrunt run --all -- destroy
+terragrunt destroy --all
+```
+
+**Shortcut example for LocalStack:**
+```bash
+cd /home/yehor/TerraformMagentoCloud/magento-cloud-minimal/production
+
+docker run --rm \
+  -v ${PWD}:/work \
+  -w /work \
+  -e USE_LOCALSTACK=true \
+  -e LOCALSTACK_ENDPOINT=http://host.docker.internal:4566 \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  -e TG_NON_INTERACTIVE=true \
+  --entrypoint /bin/sh \
+  tg-tf:local -lc "terragrunt apply --all -lock=false -auto-approve --no-color"
+```
+
+## Deploy to Real AWS
+
+When ready to deploy to real AWS (not LocalStack):
+
+### Option 1: Deploy All Modules at Once (Recommended)
+
+```bash
+# Unset LocalStack variables
+unset USE_LOCALSTACK
+unset LOCALSTACK_ENDPOINT
+
+# Set real AWS credentials
+export AWS_ACCESS_KEY_ID=<your-real-key>
+export AWS_SECRET_ACCESS_KEY=<your-real-secret>
+export AWS_DEFAULT_REGION=ap-southeast-1
+
+# Navigate to production directory
+cd /home/yehor/TerraformMagentoCloud/magento-cloud-minimal/production
+
+# Review what will be created (all modules)
+terragrunt run --all -- plan
+
+# Apply all modules (Terragrunt handles dependency order automatically)
+terragrunt run --all -- apply
+
+# Or using shortcut:
+terragrunt apply --all
+```
+
+### Option 2: Deploy Modules Individually
+
+```bash
+# Navigate to production directory
+cd /home/yehor/TerraformMagentoCloud/magento-cloud-minimal/production
+
+# Review what will be created
+cd aws-data && terragrunt plan
+cd ../magento_vpc && terragrunt plan
+
+# Apply when ready
+cd ../aws-data && terragrunt apply
+cd ../magento_vpc && terragrunt apply
+# ... continue with other modules in dependency order
+```
+
+## Verify LocalStack Deployment
+
+Check created resources:
+
+```bash
+# List VPCs
+docker run --rm \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  --entrypoint aws \
+  amazon/aws-cli \
+  --endpoint-url=http://host.docker.internal:4566 \
+  ec2 describe-vpcs
+
+# Check Terraform state files
+docker run --rm \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  --entrypoint aws \
+  amazon/aws-cli \
+  --endpoint-url=http://host.docker.internal:4566 \
+  s3 ls s3://localstack-terraform-state/
+```
+
+## Terratest (Optional)
+
+The tools image includes Go for running infrastructure tests:
+
+**Linux/macOS:**
+```bash
+docker run --rm \
+  -v ${PWD}:/work \
+  -w /work/tests \
+  --entrypoint /bin/sh \
+  -e LOCALSTACK_ENDPOINT=http://host.docker.internal:4566 \
+  -e AWS_ACCESS_KEY_ID=test \
+  -e AWS_SECRET_ACCESS_KEY=test \
+  -e AWS_DEFAULT_REGION=ap-southeast-1 \
+  tg-tf:local -lc "go test -v ./..."
+```
+
+**Windows PowerShell:**
 ```powershell
-# Point to your LocalStack port
-$env:LOCALSTACK_ENDPOINT = "http://host.docker.internal:4566"  # or 4567
-
-docker run --rm -it `
+docker run --rm `
   -v ${PWD}:/work `
   -w /work/tests `
   --entrypoint /bin/sh `
-  -e LOCALSTACK_ENDPOINT=$env:LOCALSTACK_ENDPOINT `
+  -e LOCALSTACK_ENDPOINT=http://host.docker.internal:4566 `
   -e AWS_ACCESS_KEY_ID=test `
   -e AWS_SECRET_ACCESS_KEY=test `
   -e AWS_DEFAULT_REGION=ap-southeast-1 `
   tg-tf:local -lc "go test -v ./..."
 ```
 
-### If your network MITM breaks TLS (skip certificate verification)
-Only enable for local testing in controlled networks. These flags relax verification for Go module and git downloads.
-
-```powershell
-$env:LOCALSTACK_ENDPOINT = "http://host.docker.internal:4566"  # or 4567
-
-docker run --rm -it `
-  -v ${PWD}:/work `
-  -w /work/tests `
-  --entrypoint /bin/sh `
-  -e LOCALSTACK_ENDPOINT=$env:LOCALSTACK_ENDPOINT `
-  -e AWS_ACCESS_KEY_ID=test `
-  -e AWS_SECRET_ACCESS_KEY=test `
-  -e AWS_DEFAULT_REGION=ap-southeast-1 `
-  -e GIT_SSL_NO_VERIFY=1 `
-  -e GOINSECURE=* `
-  -e GOPRIVATE=* `
-  -e GONOSUMDB=* `
-  tg-tf:local -lc "git config --global http.sslVerify false; go env -w GOINSECURE=\"*\" GOPRIVATE=\"*\" GONOSUMDB=\"*\"; go test -v ./..."
-```
-
-Module name: `magento-localstack-test` (see `tests/go.mod`).
-
-## Speed up tests (short)
-- Pre-bake deps into image:
-```dockerfile
-COPY tests/go.mod /tmp/tests/go.mod
-COPY tests/go.sum /tmp/tests/go.sum
-RUN cd /tmp/tests && go mod download
-```
-
-- Persistent dev container with caches:
-```powershell
-docker run -d --name tg-dev `
-  -v ${PWD}:/work `
-  -v tg-gomod:/go/pkg/mod `
-  -v tg-gobuild:/root/.cache/go-build `
-  -w /work/tests `
-  tg-tf:local sleep infinity
-docker exec tg-dev sh -lc "go test -v ./..."
-```
-
 ## Troubleshooting
-- Port in use (4566): point `LOCALSTACK_ENDPOINT` to the active port (e.g., `http://host.docker.internal:4567`).
-- Provider install errors on Windows volumes: keep using `/tmp/tf-cache` inside the container.
-- Backend initialization errors: ensure `TF_CLI_ARGS_init='-backend=false -reconfigure'` is set.
-- Go module TLS errors: use the "skip certificate verification" block above or bake your corporate CA into the image.
+
+### LocalStack Not Accessible
+- Ensure LocalStack is running: `docker ps | grep localstack`
+- Check LocalStack logs: `docker logs localstack`
+- Verify port 4566 is accessible
+
+### Git SSH Authentication Issues
+✅ **Fixed!** All modules now use HTTPS Git URLs instead of SSH.
+
+### State Lock Errors
+Use `-lock=false` flag when testing with LocalStack:
+```bash
+terragrunt plan -lock=false
+terragrunt apply -lock=false -auto-approve
+```
+
+### Provider Install Errors
+The Docker image caches providers in `/tmp/tf-cache` to speed up operations.
+
+### Module Source Errors
+All module sources use HTTPS URLs (not SSH) for easier access without SSH keys.
+
+## Clean Up LocalStack
+
+Stop and remove LocalStack container:
+```bash
+docker stop localstack
+docker rm localstack
+```
+
+Remove state bucket data:
+```bash
+docker volume prune
+```
+
+## Notes
+
+- **Terragrunt v0.92.1** uses new CLI commands (no more `run-all`, use native Terraform commands)
+- **State locking** with DynamoDB doesn't work perfectly in LocalStack, use `-lock=false`
+- **LocalStack** mocks AWS services but may not support all features
+- For **production deployment**, always use real AWS credentials and remove LocalStack flags
+
+## Resources Created
+
+When fully deployed, the infrastructure creates:
+- 1 VPC with public/private/database subnets
+- 4 Security Groups (DB, Redis, Web Nodes, Load Balancer)
+- 1 RDS MariaDB instance
+- 1 ElastiCache Redis cluster
+- 1 EFS file system
+- 1 Application Load Balancer
+- 1 Auto Scaling Group for Magento instances
+
+**Total Resources:** ~30-40 AWS resources

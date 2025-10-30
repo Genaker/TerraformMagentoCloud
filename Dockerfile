@@ -1,5 +1,5 @@
 # Minimal image with Terraform and Terragrunt
-FROM hashicorp/terraform:1.8
+FROM hashicorp/terraform:1.13
 
 SHELL ["/bin/sh", "-c"]
 

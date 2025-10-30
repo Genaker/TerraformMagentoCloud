@@ -1,5 +1,5 @@
 terraform {
-  source = "git::git@github.com:terraform-aws-modules/terraform-aws-rds.git?ref=v3.0.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-rds.git?ref=v6.10.0"
 }
 
 include {
