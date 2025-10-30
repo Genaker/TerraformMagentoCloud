@@ -1,5 +1,41 @@
 locals {
-  aws_region = get_env("AWS_DEFAULT_REGION", "ap-southeast-1")
+  aws_region          = get_env("AWS_DEFAULT_REGION", "ap-southeast-1")
+  use_localstack      = tobool(get_env("USE_LOCALSTACK", "false"))
+  localstack_endpoint = get_env("LOCALSTACK_ENDPOINT", "http://localhost:4566")
+
+  # When USE_LOCALSTACK=true, generate an endpoints block for the AWS provider.
+  aws_endpoints_block = local.use_localstack ? format(<<EOT
+  endpoints {
+    s3          = "%s"
+    dynamodb    = "%s"
+    ec2         = "%s"
+    iam         = "%s"
+    sts         = "%s"
+    elbv2       = "%s"
+    elasticache = "%s"
+    efs         = "%s"
+    rds         = "%s"
+    route53     = "%s"
+    autoscaling = "%s"
+    cloudwatch  = "%s"
+  }
+EOT
+,
+  local.localstack_endpoint,
+  local.localstack_endpoint,
+  local.localstack_endpoint,
+  local.localstack_endpoint,
+  local.localstack_endpoint,
+  local.localstack_endpoint,
+  local.localstack_endpoint,
+  local.localstack_endpoint,
+  local.localstack_endpoint,
+  local.localstack_endpoint,
+  local.localstack_endpoint,
+  local.localstack_endpoint) : ""
+
+  # Only force path-style S3 addressing when using LocalStack
+  aws_s3_path_style = local.use_localstack ? "s3_use_path_style = true" : ""
 }
 
 terraform {
@@ -22,8 +58,8 @@ remote_state {
     encrypt        = true
     region         = local.aws_region
     key            = format("%s/terraform.tfstate", path_relative_to_include())
-    bucket         = format("terraform-statess-%s", get_aws_account_id())
-    dynamodb_table = format("terraform-lockss-%s", get_aws_account_id())
+    bucket         = local.use_localstack ? "localstack-terraform-state" : format("terraform-statess-%s", get_aws_account_id())
+    dynamodb_table = local.use_localstack ? "localstack-terraform-locks" : format("terraform-lockss-%s", get_aws_account_id())
 
     skip_metadata_api_check     = true
     skip_credentials_validation = false
@@ -42,6 +78,9 @@ provider "aws" {
   skip_metadata_api_check     = true
   skip_region_validation      = true
   skip_credentials_validation = true
+
+  ${local.aws_s3_path_style}
+  ${local.aws_endpoints_block}
 }
 EOF
 }

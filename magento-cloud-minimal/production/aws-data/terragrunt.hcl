@@ -8,5 +8,5 @@ include {
 
 
 inputs = {
-  
+  use_localstack = tobool(get_env("USE_LOCALSTACK", "false"))
 }
