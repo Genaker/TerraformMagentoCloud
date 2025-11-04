@@ -46,7 +46,8 @@ terraform {
 }
 
 remote_state {
-  backend      = "s3"
+  # Use local backend for LocalStack, S3 for production
+  backend      = local.use_localstack ? "local" : "s3"
   disable_init = tobool(get_env("TERRAGRUNT_DISABLE_INIT", "false"))
 
   generate = {
@@ -54,23 +55,23 @@ remote_state {
     if_exists = "overwrite"
   }
 
-  config = merge(
+  config = local.use_localstack ? {
+    # Local backend for LocalStack - no S3/DynamoDB needed!
+    path = "${path_relative_to_include()}/terraform.tfstate"
+  } : merge(
     {
+      # S3 backend for production
       encrypt        = true
       region         = local.aws_region
       key            = format("%s/terraform.tfstate", path_relative_to_include())
-      bucket         = local.use_localstack ? "localstack-terraform-state" : format("terraform-states-%s", get_aws_account_id())
-      dynamodb_table = local.use_localstack ? "localstack-terraform-locks" : format("terraform-locks-%s", get_aws_account_id())
+      bucket         = format("terraform-states-%s", get_aws_account_id())
+      dynamodb_table = format("terraform-locks-%s", get_aws_account_id())
 
       skip_metadata_api_check     = true
-      skip_credentials_validation = local.use_localstack
-      skip_requesting_account_id  = local.use_localstack
+      skip_credentials_validation = false
+      skip_requesting_account_id  = false
     },
-    local.use_localstack ? {
-      endpoint                    = local.localstack_endpoint
-      force_path_style            = true
-      skip_s3_checksum            = true
-    } : {}
+    {}
   )
 }
 
