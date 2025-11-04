@@ -3,6 +3,10 @@
 .terraform
 .terragrunt-cache
 
+# Terragrunt auto-generated files
+_backend.tf
+main_providers.tf
+
 # Terraform lockfile
 .terraform.lock.hcl
 

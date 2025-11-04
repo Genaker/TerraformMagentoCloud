@@ -1,5 +1,6 @@
 locals {
-  aws_region = get_env("AWS_DEFAULT_REGION", "ap-southeast-1")
+  aws_region      = get_env("AWS_DEFAULT_REGION", "ap-southeast-1")
+  use_localstack  = tobool(get_env("USE_LOCALSTACK", "false"))
 }
 
 terraform {
@@ -59,5 +60,13 @@ inputs = {
   
   # Whether to enable encryption in transit. If this is enabled, use the following guide to access redis
   transit_encryption_enabled = false
+  
+  # Auth token - explicitly set to null to disable (module requires both or neither)
+  # For production with transit_encryption_enabled=true, set both:
+  # auth_token = "your-secure-token-here"
+  # auth_token_update_strategy = "ROTATE"
+  auth_token = null
+  auth_token_update_strategy = null
+  
   security_groups = [dependency.redis_security.outputs.security_group_id]
 }

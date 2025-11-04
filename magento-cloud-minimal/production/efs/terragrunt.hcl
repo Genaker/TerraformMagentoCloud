@@ -1,9 +1,10 @@
 locals {
-  aws_region = get_env("AWS_DEFAULT_REGION", "ap-southeast-1")
+  aws_region      = get_env("AWS_DEFAULT_REGION", "ap-southeast-1")
+  use_localstack  = tobool(get_env("USE_LOCALSTACK", "false"))
 }
 
 terraform {
-  source = "git::https://github.com/cloudposse/terraform-aws-efs.git?ref=1.8.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-efs.git?ref=v1.6.5"
 }
 
 include {
@@ -28,35 +29,41 @@ dependency "aws-data" {
 
 ###########################################################
 # View all available inputs for this module:
-# https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/4.0.0?tab=inputs
+# https://registry.terraform.io/modules/terraform-aws-modules/efs/aws/latest?tab=inputs
 ###########################################################
 inputs = {
+  # Name of EFS file system
+  name = "magento-efs"
 
-  # Name of EFS
-  # type: string
-  name = "efs-magento"
+  # Backup policy - disabled by default (set to true for production)
+  enable_backup_policy = false
 
-  # ID of the VPC where to create EFS
-  # type: string
-  vpc_id = dependency.magento_vpc.outputs.vpc_id
+  # Mount targets configuration
+  mount_targets = {
+    # Note: In LocalStack, subnets may be empty. For production, configure proper subnets
+    # Example format when subnets are available:
+    # for subnet_id in dependency.magento_vpc.outputs.public_subnets :
+    # subnet_id => {
+    #   subnet_id = subnet_id
+    # }
+  }
+
+  # Security group rules
+  security_group_description = "EFS security group for Magento"
+  security_group_vpc_id      = dependency.magento_vpc.outputs.vpc_id
   
-  # ID element. Usually an abbreviation of your organization name,
-  # e.g. 'eg' or 'cp', to help ensure generated IDs are globally unique
-  namespace = "efs"
-  
-  # ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release'
-  stage = "magento"
-  
-  # AWS Region	
-  region = local.aws_region
-  
-  # VPS
-  efs_vpc_id = dependency.magento_vpc.outputs.vpc_id
-  
-  # Subnets
-  subnets = dependency.magento_vpc.outputs.public_subnets
-  
-  # Security Groups 
-  security_groups = [dependency.web_nodes_security.outputs.security_group_id]
+  security_group_rules = {
+    vpc = {
+      description = "NFS ingress from VPC"
+      cidr_blocks = [dependency.magento_vpc.outputs.vpc_cidr_block]
+    }
+  }
+
+  # Tags
+  tags = {
+    Name        = "magento-efs"
+    Environment = "production"
+    Terraform   = "true"
+  }
 }
 

@@ -1,5 +1,5 @@
 terraform {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-autoscaling.git?ref=v8.0.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-autoscaling.git?ref=v9.0.2"
 }
 
 include {

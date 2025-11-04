@@ -37,11 +37,11 @@ inputs = {
 
   # Whether to create a database subnet group
   # type: bool
-  create_db_subnet_group = false
-
-  #  of DB subnet group. DB instance will be created in the VPC associated with the DB subnet group. If unspecified, will be created in the default VPC
-  # type: string
-  db_subnet_group_name = dependency.magento_vpc.outputs.database_subnet_group
+  create_db_subnet_group = true
+  
+  # Subnet IDs for the DB subnet group (using public subnets for LocalStack testing)
+  # type: list(string)
+  subnet_ids = dependency.magento_vpc.outputs.public_subnets
 
   option_group_name = "my-option-group"
   option_group_use_name_prefix = false

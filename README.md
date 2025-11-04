@@ -87,9 +87,9 @@ This infrastructure uses the latest stable versions:
 | VPC | v5.16.0 | terraform-aws-modules/vpc |
 | RDS | v6.10.0 | terraform-aws-modules/rds |
 | Security Group | v5.2.0 | terraform-aws-modules/security-group |
-| Auto Scaling | v8.0.0 | terraform-aws-modules/autoscaling |
+| Auto Scaling | v9.0.2 | terraform-aws-modules/autoscaling |
 | ALB | v9.11.0 | terraform-aws-modules/alb |
-| EFS | 1.8.0 | cloudposse/terraform-aws-efs |
+| EFS | v1.6.5 | terraform-aws-modules/terraform-aws-efs |
 | ElastiCache Redis | 1.2.3 | cloudposse/terraform-aws-elasticache-redis |
 
 All module sources use **HTTPS URLs** (not SSH) for easier access without SSH keys.
