@@ -1,632 +1,704 @@
-# Infrastructure as code for eCommerce Cloud Architecture on AWS (Multi Cloud AWS,GCP,Azure)
+````markdown
+# Terraform Magento Cloud
 
-This repository contains Magento 2 Cloud Terraform infrastructure as code for AWS Public Cloud.
+Infrastructure as Code for eCommerce Cloud Architecture on AWS  
+*(with support for multi-cloud: AWS, GCP, Azure)*
 
-This infrastructure is the result of years of experience scaling Magento 1 and 2 in the cloud. It comes with the best cloud development practices baked in to save your time and money.
+This repository contains Terraform infrastructure-as-code for running **Magento 2** (and other eCommerce / web platforms) on AWS.
 
-Leveraging your own AWS Account dramatically reduces your monthly spend vs. paying an expensive managed hosting provider (PaaS, SaaS).
+The infrastructure is based on years of experience scaling Magento 1 & 2 in the cloud and comes with battle-tested cloud patterns to save you time and money.
 
-This script is not limited to Magento deployments and can be used with any eCommerce/Web platform, eg. WordPress, WooCommerce, Drupal, Shopware 6, Shopify APP (Custum Private APP cloud), VueStorefront, Silyus, Oddo, ORO etc. It includes Magento in the name because it was designed for Magento at first. There are however projects using it to run Enterprise Java applications with auto scaling.
+Using **your own AWS account** dramatically reduces monthly spend compared to expensive PaaS / SaaS managed hosting.
 
-If you have any questions feel free to send me an email – yegorshytikov@gmail.com
+Although originally designed for Magento, this setup can also be used for:
 
-# Important!!!
+> WordPress, WooCommerce, Drupal, Shopware 6, Shopify Apps (Custom Private App), Vue Storefront, Sylius, Odoo, Oro, Java apps and more.
 
-Magento Software installation is out of the scope of this Project. This Repository is just an example of the AWS infrastructure provisioning for Magento using Terraform. Please refer to our another project to Install Magento 2 on Centos 8 or Amazon Linux 2 x86/ARM Linux: 
+Some projects even use it to run large **Enterprise Java** applications with auto scaling.
 
-**Magento 2 Installation Automation (Centos 8.2, Amazon Linux 2 with ARM support) GitHub repository:**
-[Magento installation Script] (https://github.com/Genaker/Magento-AWS-Linux-2-Instalation).
+If you have any questions, feel free to contact: **yegorshytikov@gmail.com**
 
-Graviton 2 ARM instances are also supported. 
+---
 
+## Table of Contents
 
-# Why Auto Scaling 
+- [Important Note](#important-note)
+- [Why Auto Scaling](#why-auto-scaling)
+- [AWS Magento 2 Cloud Features](#aws-magento-2-cloud-features)
+- [Infrastructure Overview](#infrastructure-overview)
+- [Minimal Magento Cloud Setup](#minimal-magento-cloud-setup)
+- [Multi-Regional Magento Infrastructure](#multi-regional-magento-infrastructure)
+- [Prerequisites](#prerequisites)
+- [Installing Homebrew (Linux)](#installing-homebrew-linux)
+- [Installing Terragrunt & Terraform](#installing-terragrunt--terraform)
+- [Usage Instructions](#usage-instructions)
+- [Destroying Infrastructure](#destroying-infrastructure)
+- [Demo Video](#demo-video)
+- [Debug Logging](#debug-logging)
+- [Clearing Terragrunt Cache](#clearing-terragrunt-cache)
+- [Environments: Prod & Staging](#environments-prod--staging)
+- [Multi-Cloud Deployments](#multi-cloud-deployments)
+- [Enterprise Support](#enterprise-support)
+- [Approximate AWS Cost](#approximate-aws-cost)
+- [Why Not Magento Cloud?](#why-not-magento-cloud)
+- [CodeDeploy Example](#codedeploy-example)
+- [Golden AMI Automation](#golden-ami-automation)
+- [Magento Installation Automation](#magento-installation-automation)
+- [DynamoDB & Logging Integration](#dynamodb--logging-integration)
+- [Licensing & Credits](#licensing--credits)
+- [Terragrunt + Terraform Registry](#terragrunt--terraform-registry)
 
-Increasing the number of PHP-FPM processes beyond the number of physical processor cores does not improve performance, rather is likely to degrade it, and can consume resources needlessly. Basic rule for the web is:
+---
 
-CPU(physical) = (Concurrent HTTP REquest * http_req_duration)
+## Important Note
 
-Be careful Intel CPUs are virtual and actual number of CPUs factor = 2; AWS Graviton2 ARM64 CPUs have factor 1 and are better for concurrent request processing. 
-Intel CPUs have some advantages of 20-30% in some cases, however for magento (long heavy queries) physical cores are better. With higher traffic you need more CPUs.
-It is rule for uncached pages.  
+> **Magento Software installation is out of scope for this project.**
 
-With Varnish/FPC it is the same. However Varnish has ~1ms response time and a single instance CPU can return 1000 caches pages per sec. To avoid unpredictable results with the cache invalidation, misses, uncached checkouts, cart, AJAXs, API the BEST practice is to measure performance without FPC. FPC is a bonus.
+This repository provides **AWS infrastructure provisioning** for Magento using Terraform.
 
+For automated Magento 2 installation on CentOS 8 / Amazon Linux 2 (x86/ARM), see the separate project:
 
-## AWS Magento 2 Cloud Features:
-* True Horizontal Auto Scaling 
-* Affordable (starting from ~300$ for us-west-2 region)
-* MySQL RDS scalable Managed by Amazon, multi-az failover, vertical scaling with no downtime
-* Compatible with RDS Aurora Cluster and Aurora Serverless
-* EFS - Fully managed elastic NFS for media and configuration storage
-* CloudFront CDN for static and media served from different origins S3 or Magento(EFS) as second origin 
-* Automatically back up your code and databases (point-in-time snapshot) for easy restoration
-* 99.9% Uptime, availability across multiple zones
-* High security (Security groups, private infrastructure)
-* Elastic(Static) IP and used for internet access for all EC2 instances through NAT (Network Address Translation).
-* Bastion host to provide Secure Shell (SSH) access to the Magento web servers. 
-* Appropriate security groups for each instance or function to restrict access to only necessary protocols and ports.
-* Private Public Subnets - NAT gateway, Bastion server
-* All servers and Database are securely hosted in private Network
-* System and Software Update Patches
-* DDoS Protection with AWS Shield
-* PCI compliant infrastructure
-* Redis cluster
-* Amazon Elasticsearch Service - Elasticsearch at scale with zero down time with built-in Kibana
-* Different Application Scaling Groups (ASG)
-* Application Load Balancer(ALB) with SSL/TSL termination, SSL certificates management
-* ALB Path-Based Routing, Host-Based Routing, Lambda functions as targets, HTTP header/method-based routing, Query string parameter-based routing 		
-* Scaled Varnish ASG
-* Dedicated Admin/Cron ASG
-* You can easily add new autoscaling groups for your needs (Per WebSite/for Checkout requests/for API), just copy paste code 
-* Possibility to run the same infrastructure on Production/Staging/Dev environment, different projects
-* Automatic CI/CD (CodePipeline/CodeDeploy) deployments possible
-* AWS CodeDeploy In-place deployment, Blue/green deployment from Git or S3, Redeploy or Roll Back
-* Deploying from a Development Account to a Production Account
-* Amazon Simple Email Service (Amazon SES) - cloud-based email sending service. Price $0.10 for 1K emails 
-* Amazon CloudWatch - load all the metrics (CPU, RAM, Network) in your account for search, graphing, and alarms. Metric data is kept for 15 months.
-* CloudWatch alarms that watche a single CloudWatch metric or the result of a math expression based on CloudWatch metrics and send SMS(Text) Notifications or Emails
-* Simple and Step Scaling Policies - choose scaling metrics that trigger horizontal scaling
-* Manual Scaling for Magento Auto Scaling Group (ASG)
-* AWS Command Line Interface (CLI) - tool to manage your AWS services. You can control multiple AWS services from the command line and automate them through scripts.
-* DynamoDB for logs, indexes, analytics
-* Lambda functions as targets for a load balancer
-* Elastic Container Registry (ECR) - fully-managed Docker container registry that makes it easy to store, manage, and deploy Docker container images!
-* You can use Amazon Elastic Container Service (ECS) instead of ASG with Service Auto Scaling to adjust running containers desired count automatically.
-* Awesome AWS documentation is Open Source and on GitHub
+**Magento 2 Installation Automation (CentOS 8.2, Amazon Linux 2, ARM support)**  
+👉 [Magento installation script](https://github.com/Genaker/Magento-AWS-Linux-2-Instalation)
 
-![Magento 2 AWS Infrastructure Cloud ](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)
+Graviton2 ARM instances are supported.
 
-[Cloud Flat View](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png)
+---
 
-# Our Infrastructure
+## Why Auto Scaling
 
-Infrastructure consists of multiple layers (autoscaling, alb, rds, security-group, vpc) where each layer is configured using one of the [Terraform AWS modules](https://github.com/terraform-aws-modules/) with arguments specified in `terraform.tfvars` in layers directory.
+Increasing the number of PHP-FPM processes beyond the number of **physical CPU cores** does *not* improve performance. It typically **reduces** performance and wastes resources.
 
-Terraform uses this during the module installation step of `terraform init` to download the source code to a directory on local disk so that it can be used by other Terraform commands.
+A simple rule of thumb for uncached traffic:
 
-The [https://registry.terraform.io/](public Terraform registry) provides infrastructure modules for many infrastructure resources.
+> **Physical CPU cores ≈ Concurrent HTTP Requests × Avg. Request Duration**
 
-[Terragrunt](https://github.com/gruntwork-io/terragrunt) is used to work with Terraform configurations which allows you to orchestrate dependent layers, update arguments dynamically and keep configurations. Define Terraform code once, no matter how many environments you have ([DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)).
+Notes:
 
-# Minimal Magento Cloud Terraform Infrastructure 
+- Intel instances expose **vCPUs**; effective physical core factor is usually 2.  
+- AWS Graviton2 ARM64 instances use factor 1 and often perform better for highly concurrent workloads.
+
+Intel CPUs may be 20–30% faster for some workloads, but for Magento (long, heavy queries), **more physical cores** = better throughput. With increasing traffic, you need more CPU.
+
+This rule applies to **uncached pages**.
+
+With **Varnish / FPC**, the principle remains: Varnish can respond in ~1 ms, and a single CPU can serve hundreds or thousands of cached pages per second. To avoid misleading metrics caused by cache invalidations / misses / uncached checkout/API calls:
+
+> Best practice is to **measure performance without FPC**. FPC is a bonus, not the base.
+
+---
+
+## AWS Magento 2 Cloud Features
+
+Key features of this Terraform setup:
+
+- True **horizontal auto scaling**
+- Affordable: starting from ~**$300/month** in `us-west-2`
+- **MySQL RDS**: fully managed, multi-AZ failover, vertical scaling with minimal or no downtime
+- Compatible with **RDS Aurora** (Cluster & Serverless)
+- **EFS**: elastic NFS for media & config storage
+- **CloudFront CDN** for static and media (S3 or Magento/EFS as secondary origin)
+- Automatic backups: code & database (point-in-time snapshots)
+- ~99.9% uptime with multi-AZ architecture
+- Strong security: private subnets, Security Groups
+- Elastic (static) IP with outbound access via **NAT**
+- Bastion host for secure SSH access to web servers
+- Fine-grained Security Groups per role
+- Private/public subnets, NAT gateway, Bastion
+- OS & software update patching
+- DDoS protection with **AWS Shield**
+- PCI-ready infrastructure patterns
+- **Redis** cluster
+- **Amazon OpenSearch / Elasticsearch** with Kibana, zero-downtime scaling
+- Multiple **Application Auto Scaling Groups (ASG)**
+- **Application Load Balancer (ALB)** with SSL/TLS termination & certificates
+- ALB: path-based, host-based, header, method & query-string routing; Lambda targets
+- Scaled **Varnish ASG**
+- Dedicated **Admin/Cron ASG**
+- Add new ASGs per website / checkout / API by copying module code
+- Same pattern for **Production / Staging / Dev** and multiple projects
+- CI/CD ready: **CodePipeline / CodeDeploy**
+- CodeDeploy: in-place & blue/green deployments from Git or S3 with rollback
+- Cross-account deployments (Dev → Prod)
+- **Amazon SES**: ~\$0.10 per 1K emails
+- **CloudWatch**: metrics (CPU, RAM, network) with 15 months retention
+- CloudWatch alarms: SMS / email on metrics or math expressions
+- Simple / step scaling policies
+- Manual scaling available for Magento ASG
+- **AWS CLI** integration for scripting
+- **DynamoDB** for logs/indexes/analytics
+- Lambda as ALB targets
+- **ECR** for container images
+- Optional **ECS** instead of ASG with Service Auto Scaling
+- Backed by excellent AWS documentation & open-source tooling
+
+![Magento 2 AWS Infrastructure Cloud](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud.png)  
+[Cloud flat view](https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png)
+
+---
+
+## Infrastructure Overview
+
+The infrastructure consists of multiple **layers** (autoscaling, ALB, RDS, security groups, VPC, etc.). Each layer:
+
+- Uses a [Terraform AWS module](https://github.com/terraform-aws-modules/)
+- Is configured via `terraform.tfvars` in its layer directory
+
+Terraform downloads module sources during `terraform init`.
+
+We use [Terragrunt](https://github.com/gruntwork-io/terragrunt) to:
+
+- Orchestrate dependent layers
+- Keep configuration **DRY**
+- Dynamically update arguments
+- Reuse code across environments
+
+---
+
+## Minimal Magento Cloud Setup
 
 ![Magento Cloud Minimal Terraform Infrastructure](https://user-images.githubusercontent.com/9213670/134946402-8a4ff61d-5def-448a-83dd-89eadecaa550.png)
 
-The Minimal Magento Cloud infrastructure designed for small and extra large merchants. It can handle any load of up to 10,000 not cached requests per second(according to the internal test). Magento Commerce Cloud can’t handle even 100 simultaneous requests. Also, it dramatically reduces management overhead and cost.
-After fixes in the Magento Fork Varnish is the redundant solution for 98% of the merchants and is not the best practice anymore.  
+The **Minimal Magento Cloud** infrastructure is designed for both small and very large merchants:
 
-Sources of the small infrastructure located in the separate branch-> https://github.com/Genaker/TerraformMagentoCloud/tree/minimal
+- Internal tests: up to **10,000 uncached requests/sec**
+- Magento Commerce Cloud often struggles with ~100 concurrent requests
 
-# Magento 2 Multi Regional Infastructure Support 
+After applying Magento-specific fixes, **Varnish becomes redundant** for ~98% of merchants in this architecture.
 
-We have a global scale-out model. All data updates (POST, DELETE request) are directed to the main data center region. All GET and CACHED requests (black lines) are routed to regional data centers. 
+Minimal setup is available in a separate branch:  
+👉 <https://github.com/Genaker/TerraformMagentoCloud/tree/minimal>
 
-Geographically remote web servers add latency and degrade the shopping experience. Such mistakes can prove costly, resulting in lost customers, missed revenue, and reputational damage.
+---
 
-Route your traffic to your regional Magento Servers based on the user's location.
-When you use geolocation routing, you can localize your web store and present some or all of your websites in the language of your users. You can also use geolocation routing to restrict access to the websites to only the locations you have distribution rights. Another use case is balancing load across endpoints.
+## Multi-Regional Magento Infrastructure
 
-Can you imagine your USA-based customers' frustration when your servers are located in Norway 🇳🇴 or Australia 🇦🇺?
+We support a **global scale-out model**:
 
-## Pre-requirements
+- All **writes** (POST/DELETE) go to the **primary region**
+- All **GET & cached** requests are served from regional data centers
 
-- [Terraform 0.12 or newer](https://www.terraform.io/)
-- [Terragrunt 0.19 or newer](https://github.com/gruntwork-io/terragrunt)
-- [tfvars-annotations](https://github.com/antonbabenko/tfvars-annotations) - Update values in terraform.tfvars using annotations
-- Optional: [pre-commit hooks](http://pre-commit.com) to keep Terraform formatting and documentation up-to-date
+Remote web servers add latency and hurt UX, leading to:
 
-# Install HomeBrew on Linux
+- Lost customers
+- Missed revenue
+- Reputation damage
 
-Paste at a terminal prompt:
-```
+Using **geolocation routing**, you can:
+
+- Route traffic to the closest Magento region
+- Localize storefronts (language, content, currencies)
+- Restrict access by region (distribution rights)
+- Balance traffic across endpoints
+
+> Imagine US customers hitting servers only in Norway 🇳🇴 or Australia 🇦🇺 – not ideal.
+
+---
+
+## Prerequisites
+
+- [Terraform 0.12+](https://www.terraform.io/)
+- [Terragrunt 0.19+](https://github.com/gruntwork-io/terragrunt)
+- [tfvars-annotations](https://github.com/antonbabenko/tfvars-annotations) – update `terraform.tfvars` via annotations
+- Optional: [pre-commit hooks](http://pre-commit.com) (formatting, docs, etc.)
+
+---
+
+## Installing Homebrew (Linux)
+
+```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-```
-The installation script installs Homebrew to /home/linuxbrew/.linuxbrew using sudo if possible and, if not, in your home directory at ~/.linuxbrew. Homebrew does not use sudo after installation. Using /home/linuxbrew/.linuxbrew allows the use of more binary packages (bottles) than installing in your personal home directory.
+````
 
-The followig instructions will add Homebrew to your PATH and to your bash shell profile script (either ~/.profile on Debian/Ubuntu or ~/.bash_profile on CentOS/Fedora/RedHat).
-```
+Then:
+
+```bash
 test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
 test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
 echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
 ```
-You’re done! Try installing a package:
-```
+
+Test:
+
+```bash
 brew install hello
 ```
-If you’re using an older distribution of Linux, installing your first package will also install a recent version of glibc and gcc. Use `brew doctor` to troubleshoot common issues.
 
-If you are using Mac you can install all dependencies using Homebrew:
+On macOS, install dependencies:
 
-    $ brew install terraform terragrunt pre-commit
-    
-## Manual install:
+````bash
+brew install terraform terragrunt pre-commit
+``>
 
-You can install Terragrunt manually by going to the [Releases page](https://github.com/gruntwork-io/terragrunt/releases), downloading the binary for your OS, renaming it to terragrunt and adding it to your PATH.
+---
 
-# Install Terragrunt and Terraform Ubuntu Manually
-```
-sudo -s; ## run as a super user
-    export TERRAFORM_VERSION=0.12.24 \
-    && export TERRAGRUNT_VERSION=0.23.2 \
-    && mkdir -p /ci/terraform_${TERRAFORM_VERSION} \
-    && wget -nv -O /ci/terraform_${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
-    && unzip -o /ci/terraform_${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin/ \
-    && mkdir -p /ci/terragrunt-${TERRAGRUNT_VERSION}/ \
-    && wget -nv -O /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 \
-    && sudo chmod a+x /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt \
-    && cp /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt /bin \
-    && chmod a+x /bin/terragrunt \
-    && rm -rf /ci \
-    && exit
-```
-Test The Terragrunt/Terraform installation(Optional):
-```
-terragrunt -v;
+## Installing Terragrunt & Terraform
+
+### Manual install (Ubuntu example)
+
+```bash
+sudo -s  # run as root
+
+export TERRAFORM_VERSION=0.12.24
+export TERRAGRUNT_VERSION=0.23.2
+
+mkdir -p /ci/terraform_${TERRAFORM_VERSION}
+wget -nv -O /ci/terraform_${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+  https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+unzip -o /ci/terraform_${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin/
+
+mkdir -p /ci/terragrunt-${TERRAGRUNT_VERSION}
+wget -nv -O /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt \
+  https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
+chmod a+x /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt
+cp /ci/terragrunt-${TERRAGRUNT_VERSION}/terragrunt /bin
+chmod a+x /bin/terragrunt
+
+rm -rf /ci
+exit
+````
+
+Test:
+
+```bash
+terragrunt -v
 terraform -v
 ```
 
-## Instructions for use
+---
 
-Step 0. Terraform uses the SSH protocol to clone the modules. Configured SSH keys will be used automatically. Add your SSH key to github account. (https://help.github.com/en/enterprise/2.15/user/articles/adding-a-new-ssh-key-to-your-github-account)
+## Usage Instructions
 
-Git+SSH is used because it works for both public and private repositories.
+### Step 0 – SSH
 
-Step 1. Set credentials. By default, access credentials to AWS account should be set using environment variables:
-```
-     export AWS_DEFAULT_REGION=us-west-1 ## change it to your preferable AWS region
-     export AWS_ACCESS_KEY_ID="..."
-     export AWS_SECRET_ACCESS_KEY="..."
-```
-Alternatively, you can edit `common/main_providers.tf` and use another authentication mechanism as described in the [AWS provider documentation](https://www.terraform.io/docs/providers/aws/index.html#authentication).
+Terraform uses SSH to clone modules. Configure your SSH key in GitHub:
+[https://help.github.com/en/enterprise/2.15/user/articles/adding-a-new-ssh-key-to-your-github-account](https://help.github.com/en/enterprise/2.15/user/articles/adding-a-new-ssh-key-to-your-github-account)
 
-The AWS provider offers a flexible means of providing credentials for authentication. The following methods are supported, in this order, and explained below:
+Git+SSH works for both public & private repos.
 
-Static credentials
-Environment variables
-Shared credentials/configuration file
-CodeBuild, ECS, and EKS Roles
-EC2 Instance Metadata Service (IMDS and IMDSv2)
+### Step 1 – AWS Credentials
 
-Step 2. Once all arguments are set, run this command to create infrastructure in all layers in a single region:
+Set environment variables:
 
-    $ cd production
-    $ terragrunt apply-all
-
-Alternatively, you can create infrastructure in a single layer (eg, `autoscaling_3`):
-
-    $ cd production/autoscaling_3
-    $ terragrunt apply
-
-See [official Terragrunt documentation](https://github.com/gruntwork-io/terragrunt/blob/master/README.md) for all available commands and features.
-
-If you are using newer version of the terragrunt you should use :
-
-- **Region as a whole (slower&complete).** Run this command to create infrastructure in all layers in a single region:
-
-```
-$ cd ap-southeast-1
-$ terragrunt run-all apply
+```bash
+export AWS_DEFAULT_REGION=us-west-1   # choose your region
+export AWS_ACCESS_KEY_ID="..."
+export AWS_SECRET_ACCESS_KEY="..."
 ```
 
-- **As a single layer (faster&granular).** Run this command to create infrastructure in a single layer (eg, `magento_auto_scaling`):
+Or configure credentials as per the [AWS provider docs](https://www.terraform.io/docs/providers/aws/index.html#authentication).
 
-```
-$ cd ap-southeast-1/magento_auto_scaling
-$ terragrunt apply
-```
+### Step 2 – Create Infrastructure
 
-After the confirmation your infrastructure should be created.
+**All layers in region:**
 
-## Destroy infrastructure
-
-**destroy-all** (DEPRECATED: use run-all)
-DEPRECATED: Use **run-all destroy** instead.
-
-```
- terragrunt run-all destroy
+```bash
+cd production
+terragrunt apply-all
 ```
 
-Destroy a ‘stack’ by running ‘terragrunt destroy’ in each subfolder.
+**Single layer (example: `autoscaling_3`):**
 
+```bash
+cd production/autoscaling_3
+terragrunt apply
+```
 
-# Demo video showing how it works (click on image)
+For newer Terragrunt:
+
+* **Region (all layers):**
+
+  ```bash
+  cd ap-southeast-1
+  terragrunt run-all apply
+  ```
+
+* **Single layer:**
+
+  ```bash
+  cd ap-southeast-1/magento_auto_scaling
+  terragrunt apply
+  ```
+
+---
+
+## Destroying Infrastructure
+
+Preferred:
+
+```bash
+terragrunt run-all destroy
+```
+
+Terraform will ask for confirmation unless `-auto-approve` is used.
+
+Preview with:
+
+```bash
+terraform plan -destroy
+```
+
+---
+
+## Demo Video
+
+**Click to watch:**
 
 <a href="https://www.youtube.com/watch?v=kmnlrXSTQlM">
-<img alt="Magento AWS Cloud" src="https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png" width="50%" height="50%">
+  <img alt="Magento AWS Cloud" src="https://github.com/Genaker/TerraformMagentoCloud/blob/master/Magento2Cloud-Flat.png" width="50%" height="50%">
 </a>
 
-or click the url to see the video: (https://www.youtube.com/watch?v=kmnlrXSTQlM)
+Or open: [https://www.youtube.com/watch?v=kmnlrXSTQlM](https://www.youtube.com/watch?v=kmnlrXSTQlM)
 
-Architecting your Magento platform to grow with your business can sometimes be a challenge. This video walks through the steps needed to take an out-of-the-box, single-node Magento implementation and turn it into a highly available, elastic, and robust deployment. This includes an end-to-end caching strategy that provides an efficient front-end cache (including populated shopping carts) using Varnish on Amazon EC2 as well as offloading the Magento caches to separate infrastructure such as [https://aws.amazon.com/elasticache/](Amazon ElastiCache). We also look at strategies to manage the Magento Media library outside of the application instances, including [https://aws.amazon.com/efs/](EFS shared storage solutions).
+The video shows how to:
 
+* Transform a single-node Magento into a **highly available, elastic deployment**
+* Use Varnish (on EC2) and [Amazon ElastiCache](https://aws.amazon.com/elasticache/) for caching
+* Keep Magento media outside app instances using [EFS](https://aws.amazon.com/efs/)
 
-# Debug logging
+---
 
-If you set the TERRAGRUNT_DEBUG environment variable to “true”, the stack trace for any error will be printed to stdout when you run the app.
+## Debug Logging
 
-Additionally, newer features introduced in v0.19.0 (such as locals and dependency blocks) can output more verbose logging if you set the TG_LOG environment variable to debug.
+Set:
 
-Turn on debug when you need do troubleshooting.
+```bash
+export TERRAGRUNT_DEBUG=true
+export TG_LOG=debug
 ```
-# or if you run with terragrunt
-TF_LOG=DEBUG terragrunt <command>
+
+Example:
+
+```bash
+TF_LOG=DEBUG terragrunt apply
 ```
 
-In the new versions of the terragrunt use:
-```
+New Terragrunt versions:
+
+```bash
 terragrunt run-all apply --terragrunt-log-level debug --terragrunt-debug
 ```
 
-Terragrunt and Terraform usually play well together in helping you write DRY, re-usable infrastructure. But how do we figure out what went wrong in the rare case that they don’t play well?
+This:
 
-Terragrunt provides a way to configure logging level through the --terragrunt-log-level command flag. Additionally, Terragrunt provides --terragrunt-debug, that can be used to generate terragrunt-debug.tfvars.json.
+* Creates `terragrunt-debug.tfvars.json`
+* Prints instructions to reproduce the same Terraform run
 
-For example you could use it like this to debug an apply that’s producing unexpected output:
+Useful to determine if issues are caused by:
 
-```
-$ terragrunt apply --terragrunt-log-level debug --terragrunt-debug
-```
+* Misconfiguration
+* Terragrunt bugs
+* Terraform bugs
 
-Running this command will do two things for you:
+---
 
-Output a file named terragrunt-debug.tfvars.json to your terragrunt working directory (the same one containing your terragrunt.hcl).
-Print instructions on how to invoke terraform against the generated file to reproduce exactly the same terraform output as you saw when invoking terragrunt. This will help you to determine where the problem’s root cause lies.
-Using those features is helpful when you want determine which of these three major areas is the root cause of your problem:
+## Clearing Terragrunt Cache
 
-Misconfiguration of your infrastructure code.
- - An error in terragrunt.
- - An error in terraform.
+Terragrunt uses `.terragrunt-cache` for temporary files.
 
-# Clearing the Terragrunt cache
+List caches:
 
-Terragrunt creates a .terragrunt-cache folder in the current working directory as its scratch directory. It downloads your remote Terraform configurations into this folder, runs your Terraform commands in this folder, and any modules and providers those commands download also get stored in this folder. You can safely delete this folder any time and Terragrunt will recreate it as necessary.
-
-If you need to clean up a lot of these folders (e.g., after terragrunt apply-all), you can use the following commands on Mac and Linux:
-
-Recursively find all the .terragrunt-cache folders that are children of the current folder:
-```
+```bash
 find . -type d -name ".terragrunt-cache"
 ```
-If you are ABSOLUTELY SURE you want to delete all the folders that come up in the previous command, you can recursively delete all of them as follows:
-```
+
+Delete them:
+
+```bash
 find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \;
 ```
-Also consider setting the TERRAGRUNT_DOWNLOAD environment variable if you wish to place the cache directories somewhere else.
 
-# Destroy Terragrunt Magento Infrastructure 
-```
-terragrunt destroy-all 
-```
-Infrastructure managed by Terraform will be destroyed. This will ask for confirmation before destroying.
+You can relocate cache directories using `TERRAGRUNT_DOWNLOAD`.
 
-This command accepts all the arguments and flags that the apply command accepts, with the exception of a plan file argument.
+---
 
-If -auto-approve is set, then the destroy confirmation will not be shown.
+## Environments: Prod & Staging
 
-The -target flag, instead of affecting "dependencies" will instead also destroy any resources that depend on the target(s) specified. For more information, see the [Targeting section of the terraform plan documentation](https://www.terraform.io/docs/commands/plan.html#resource-targeting).
+Example structure with three Magento environments:
 
-The behavior of any terraform destroy command can be previewed at any time with an equivalent `terraform plan -destroy` command.
-
-
-# Production & staging environments 
-
-You can copy/paste folders to create new environments. Consider the following files structure, which defines three magento environments (prod, project-3 and stage) with the same infrastructure in each one (an app, a MySQL database, and a VPC):
-```
+```text
 └── magento
     ├── prod
     │   ├── app
-    │   │   └── main.tf
     │   ├── mysql
-    │   │   └── main.tf
     │   └── vpc
-    │       └── main.tf
     ├── project-3
     │   ├── app
-    │   │   └── main.tf
     │   ├── mysql
-    │   │   └── main.tf
     │   └── vpc
-    │       └── main.tf
     └── stage
         ├── app
-        │   └── main.tf
         ├── mysql
-        │   └── main.tf
         └── vpc
-            └── main.tf
-```    
-The contents of each environment will be more or less identical, except perhaps for a few settings (eg. the prod environment may use bigger or more servers). As the size of the infrastructure grows, having to maintain all of this duplicated code between environments becomes more error prone. You can reduce the amount of copying and pasting using Terraform modules, but even the code to instantiate a module and set up input variables, output variables, providers and remote state can still create a lot of maintenance overhead.
-
-Terragrunt allows you to keep your Magento backend configuration DRY (“Don’t Repeat Yourself”) by defining it once in a root location and inheriting that configuration in all child modules. Let’s say your Terraform code has the following folder layout:
 ```
-stage
-├── frontend-app
-│   └── main.tf
-└── mysql
-    └── main.tf
-``` 
-To use Terragrunt, add a single terragrunt.hcl file to the root of your repo, in the stage folder, and one terragrunt.hcl file in each module folder:
+
+To keep things DRY, use Terragrunt with a root `terragrunt.hcl` and per-module `terragrunt.hcl` files, inheriting shared configuration.
+
+---
+
+## Multi-Cloud Deployments
+
+Terraform provides cloud-agnostic IaC:
+
+* AWS
+* GCP
+* Microsoft Azure
+* Alibaba Cloud
+* VMware
+* Kubernetes
+* On-prem solutions
+
+The same patterns can be extended beyond AWS where relevant modules exist.
+
+---
+
+## Enterprise Support
+
+Several Magento agencies use this solution and provide:
+
+* Installation
+* Support
+* Custom development
+
+The project currently has **10+ partners**.
+To be listed as a cloud service provider, contact: **[yegorshytikov@gmail.com](mailto:yegorshytikov@gmail.com)**
+
+Other related projects:
+
+* Ansible-based Magento Cloud provisioning:
+  [https://github.com/Genaker/AWS_Magento2_Ansible](https://github.com/Genaker/AWS_Magento2_Ansible)
+
+* AWS CDK-based Magento Cloud provisioning: **coming soon**
+
+---
+
+## Approximate AWS Cost (Example)
+
+```text
++-------------+---------------------+-----------+------------+
+| Category    | Type                | Region    | Total cost |
++-------------+---------------------+-----------+------------+
+| appservices | Email 10K (SES)     | us-west-2 | $1.00      |
+| storage     | EFS 20GB            | us-west-2 | $6.00      |
+| storage     | S3 50GB             | us-west-2 | $2.00      |
+| compute     | EC2 Web (c5.large)  | us-west-2 | $61.20     |
+| networking  | 2x ALB              | us-west-2 | $43.92     |
+| compute     | Admin/Cron (t3.med) | us-west-2 | $29.95     |
+| database    | ElastiCache Redis   | us-west-2 | $24.48     |
+| compute     | Varnish (t3.large)  | us-west-2 | $29.95     |
+| analytics   | Elasticsearch (t2)  | us-west-2 | $12.96     |
+| database    | RDS MySQL (t3.med)  | us-west-2 | $48.96     |
+| storage     | EBS 30GB            | us-west-2 | $9.13      |
++-------------+---------------------+-----------+------------+
+| Total                               ≈         | $269.55    |
++-------------------------------------+---------+------------+
 ```
-stage
-├── terragrunt.hcl
-├── frontend-app
-│   ├── main.tf
-│   └── terragrunt.hcl
-└── mysql
-    ├── main.tf
-    └── terragrunt.hcl
-```
-Now you can define your backend configuration just once in the root terragrunt.hcl file!
-
-
-# Multi cloud deployments 
-
-Terraform provides Magento 2 Open Source Cloud infrastructure as a code approach to provision and manage any cloud (AWS, GoogleCloud, Azure, Alibaba, or other types of services such as Kubernetes).
-
-Terraform can manage popular service providers, such as AWS, GCP, Micosoft Azure, Alibaba Cloud, and VMware, as well as custom in-house and on-premises solutions.
-
-## Enterprise Support/Installation/Development Package available.
-Several Magento development Agencies select this custom cloud solution for their clients and they are willing to provide services/support for businesses based on this Open Source project.
-This project currently has 10+ partners. 
-If you are willing to be listed as cloud service provider feel free message me.
-
-
-More information: yegorshytikov@gmail.com
-
-I also have Ansible Magento Cloud provisioning implementation:
-https://github.com/Genaker/AWS_Magento2_Ansible
-
-And also Magento Cloud provisioning Using AWS CDK. Coming soon ...
-
-
-# Approximate Magento 2 AWS Cloud infrastructure Cost
-
-```
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| Category    | Type                | Region    | Total cost | Count | Unit price | Instance type | Instance size |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| appservices | Email Service - 10K | us-west-2 | $1.00      | 1     | $1.00      |               |               |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| storage     | EFS storage – 20GB  | us-west-2 | $6.00      | 1     | $6.00      |               |               |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| storage     | S3 – 50Gb           | us-west-2 | $2.00      | 1     | $2.00      |               |               |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| compute     | ec2-Web Node        | us-west-2 | $61.20     | 1     | $61.20     | c5            | large         |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| networking  | elb - Load Balancer | us-west-2 | $43.92     | 2     | $21.96     |               |               |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| compute     | ec2-Admin-Cron Node | us-west-2 | $29.95     | 1     | $29.95     | t3            | medium        |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| database    | ElastiCache-Redis   | us-west-2 | $24.48     | 1     | $24.48     | t3            | small         |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| compute     | ec2-Varnish         | us-west-2 | $29.95     | 1     | $29.95     | t3            | large         |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| analytics   | ElasticSearch       | us-west-2 | $12.96     | 1     | $12.96     | t2            | micro         |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| database    | RDS MySQL           | us-west-2 | $48.96     | 1     | $48.96     | t3            | medium        |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-| storage     | EBS Storage 30Gb    | us-west-2 | $9.13      | 1     | $9.13      |               |               |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-|             |                     | Total     | $269.55    |       |            |               |               |
-+-------------+---------------------+-----------+------------+-------+------------+---------------+---------------+
-```
-# eCommerce Cloud Price Visualisation 
 
 ![Magento 2 AWS Cloud Cost](https://github.com/Genaker/TerraformMagentoCloud/blob/master/small-big.png)
 
-# Why not Magento Cloud?
-```
+---
+
+## Why Not Magento Cloud?
+
+```text
 +-----------------------------------------+-------------------------------------------+
 |              Magento Cloud              |               This Solution               |
 +-----------------------------------------+-------------------------------------------+
-| Manual scaling, requires prior notice,  | Unlimited Resource, scaling by rule,      |
-| vertical scaling,                       | no performance degradation                |
-| performance degradation during scaling  |                                           |
+| Manual, vertical scaling; performance   | Rule-based auto scaling; no performance   |
+| degradation during scaling              | degradation                               |
 +-----------------------------------------+-------------------------------------------+
-| Fastly CDN only                         | Completely CDN agnostic,                  |
-|                                         |  works with Cloudflare, CloudFront        |
+| Fastly CDN only                         | CDN-agnostic (Cloudflare, CloudFront, …)  |
 +-----------------------------------------+-------------------------------------------+
-| Works only with Enterprise version M2   | Works with any version of Magento 1/2     |
+| Enterprise-only licensing               | Works with any Magento 1/2 edition        |
 +-----------------------------------------+-------------------------------------------+
-| Expensive $2000-$10000 month * +        | Paying only for AWS resources you used,   |
-| Enterprise license                      | starting from 300$ months                 |
+| $2,000–$10,000+/month + Enterprise lic. | Pay only for AWS usage, from ~$300/month  |
 +-----------------------------------------+-------------------------------------------+
-| Not Customizable                        | Fully Customizeble                        |
+| Limited customization                   | Fully customizable                        |
 +-----------------------------------------+-------------------------------------------+
-| Host only single Magento 2 CE           | Can host multiple project, web sites,     |
-| installation                            | tech stacks, PHP, Node.JS, Python, Java;  |
-|                                         | Magento 1/2, WordPres, Drupal, Joomla,    |
-|                                         | Presta Shop, Open Cart, Laravel, Django   |
+| Single Magento 2 CE installation        | Hosts multiple sites, stacks & apps       |
 +-----------------------------------------+-------------------------------------------+
 ```
-*Magento Cloud introduces: 
-OVERAGE FEES for the Compute Overage usage (per vCPU day): ~$X(price of the Commerce Cloud is Adore Secret)/vCPU-day when a raw AWS vCPU cost is less than 1$ per day. 
 
-From the Magento Cloud Agremment: 
+Magento Cloud also charges **overage fees** for compute usage (vCPU-days). Given raw AWS vCPU is under $1/day, these overages can be very expensive.
 
-Magento Cloud Customer hereby authorizes Magento, if applicable, to charge its credit card or other payment instrument or Subscription Fees, Overage Fees and/or any upgrades to the Services ordered, and any applicable taxes in arrears or at time of order, as the case may be.
+From Magento Cloud agreement:
 
-Because of the bad Magento Cloud Architecture and performace you cloud HIDDEN OVERAGE FEES can be more then a Contract price. 
+> “Customer authorizes Magento to charge Subscription Fees, Overage Fees, upgrades, and taxes…”
 
+Because of Magento Cloud’s architecture and performance, hidden overage fees can exceed your contract price.
 
-# Basic Deployment With CodeDeploy Example 
+---
 
-## Code and application deployment is beyond the scope of this repo. This repo for infrastructure provisioning only!!!
+## CodeDeploy Example
 
-AWS CodeDeploy is a managed deployment technology. It provides great features like rolling deployments, automatic rollback, and load balancer integration. It is technology agnostic and Amazon uses it to deploy everything. 
+> **Note:** Application deployment is out of scope; this repo is for infrastructure provisioning.
 
-ASSUMING YOU ALREADY HAVE an AWS account and CodeDeploy setup
+**Example `appspec.yml`:**
 
-Here are the basic that we take on a deployment for M2 
-
-Here is the appspec.yml file (https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file.html#appspec-reference-ecs)
-```
+```yaml
 version: 0.0
 os: linux
 hooks:
-    BeforeInstall:
-        - location: config_files/scripts/beforeInstall.bash
-          runas: root
-    AfterInstall:
-        - location: config_files/scripts/afterInstall.bash
-          runas: mage_user
-        - location: config_files/scripts/moveToProduction.bash
-          runas: root
-        - location: config_files/scripts/cacheclean.bash
-          runas: mage_user
+  BeforeInstall:
+    - location: config_files/scripts/beforeInstall.bash
+      runas: root
+  AfterInstall:
+    - location: config_files/scripts/afterInstall.bash
+      runas: mage_user
+    - location: config_files/scripts/moveToProduction.bash
+      runas: root
+    - location: config_files/scripts/cacheclean.bash
+      runas: mage_user
 ```
 
-# Magento 2 AWS Code Deploy script example
-Script to 'compile' magento on Deploy server - You pull and compile code to deploy server or build Docker container end after just push code to production using Code Deploy - fastest way 
+**Magento 2 build script example (`compile.sh`):**
 
-```
+```bash
 cd production/build/public_html
+
 git checkout .
 git pull origin master
+
 rm -rf var/cache/* var/page_cache/* var/composer_home/* var/tmp/*
+
 php composer.phar update --no-interaction --no-progress --optimize-autoloader
 bin/magento setup:upgrade
 bin/magento setup:static-content:deploy -t Magento/backend
 bin/magento setup:static-content:deploy en_US es_ES -a frontend
-bin/magento setup:di:compile
-# Make code files and directories read-only
+bin/magento setup:di-compile
+
 echo "Setting directory base permissions to 0750"
 find . -type d -exec chmod 0750 {} \;
+
 echo "Setting file base permissions to 0640"
 find . -type f -exec chmod 0640 {} \;
-chmod o-rwx app/etc/env.php && chmod u+x bin/magento
 
-# Compress source at shared directory
+chmod o-rwx app/etc/env.php
+chmod u+x bin/magento
+
 if [ ! -d /build ]; then
-    mkdir -p /build
+  mkdir -p /build
 fi
-tar -czvf /build/build.tar.gz . --exclude='./pub/media' --exclude='./.htaccess' --exclude='./.git' --exclude='./var/cache' --exclude='./var/composer_home' --exclude='./var/log' --exclude='./var/page_cache' --exclude='./var/import' --exclude='./var/export' --exclude='./var/report' --exclude='./var/backups' --exclude='./var/tmp' --exclude='./var/resource_config.json' --exclude='./var/.sample-data-state.flag' --exclude='./app/etc/config.php' --exclude='./app/etc/env.php'
-```
-Now you can deploy to your pre-configured group
 
+tar -czvf /build/build.tar.gz . \
+  --exclude='./pub/media' \
+  --exclude='./.htaccess' \
+  --exclude='./.git' \
+  --exclude='./var/cache' \
+  --exclude='./var/composer_home' \
+  --exclude='./var/log' \
+  --exclude='./var/page_cache' \
+  --exclude='./var/import' \
+  --exclude='./var/export' \
+  --exclude='./var/report' \
+  --exclude='./var/backups' \
+  --exclude='./var/tmp' \
+  --exclude='./var/resource_config.json' \
+  --exclude='./var/.sample-data-state.flag' \
+  --exclude='./app/etc/config.php' \
+  --exclude='./app/etc/env.php'
 ```
+
+**Create deployment:**
+
+```bash
 sh ./compile.sh
+
 aws deploy create-deployment \
---application-name AppMagento2 \
---deployment-config-name CodeDeployDefault.OneAtATime \
---deployment-group-name MyMagentoApp \
---description "Live Deployment" \
---s3-location bucket=mage-codedeploy,bundleType=zip,eTag=<tagname>,key=live-build2.zip
+  --application-name AppMagento2 \
+  --deployment-config-name CodeDeployDefault.OneAtATime \
+  --deployment-group-name MyMagentoApp \
+  --description "Live Deployment" \
+  --s3-location bucket=mage-codedeploy,bundleType=zip,eTag=<tagname>,key=live-build2.zip
 ```
 
-Create this script to show where you are in the deployment
+**Check status (`show-deployment.sh`):**
 
-show-deployment.sh
-
+```bash
+aws deploy get-deployment \
+  --deployment-id "$1" \
+  --query "deploymentInfo.[status, creator]" \
+  --output text
 ```
-aws deploy get-deployment --deployment-id $1 --query "deploymentInfo.[status, creator]" --output text
+
+For Docker-based deployment, you can instead:
+
+```bash
+docker pull MAGENTO_IMAGE_NAME:TAG
 ```
 
-File 'config_files/scripts/afterInstall.bash' should run setup:upgrade --keep-generated, nginx, php-fpm restart and similar stuff
+Example deploy script:
+[https://github.com/Genaker/TerraformMagentoCloud/blob/master/deploy.sh](https://github.com/Genaker/TerraformMagentoCloud/blob/master/deploy.sh)
 
-##How to Deploy With Docker 
+---
 
-Just run command in your codeDeploy script 
+## Golden AMI Automation
 
-```
-docker pull [OPTIONS] MAGENTO_IMAGE_NAME[:TAG|@DIGEST]
+A **Golden AMI** (gold image) is a hardened OS image with:
 
-```
-Example of the deploy file: https://github.com/Genaker/TerraformMagentoCloud/blob/master/deploy.sh
+* Baseline configuration
+* Security patches
+* Logging / monitoring agents
 
-# Automate the installation of software using Golden AMI
+You can:
 
-A “golden AMI” or “gold image” is an Magento AMI you standardize through configuration, consistent security patching, and hardening. It also contains agents you approve for logging, security, performance monitoring, etc. Many enterprise customers have a mature AMI pipeline setup to create a golden AMI of base operating systems for the organization. For a sample golden AMI pipeline, see [The Golden AMI Pipeline] (https://aws.amazon.com/blogs/awsmarketplace/announcing-the-golden-ami-pipeline/).
+1. Launch from base AMI
+2. Install Magento / Odoo / WordPress / Shopware etc.
+3. Bake a custom AMI
+4. Launch new instances from that AMI
 
-You can launch an instance from an existing AMI, customize the instance, setup Software (Magento, ODDO, Wordpress, Shopware etc.) and then save this updated configuration as a custom AMI. Instances launched from this new custom AMI include the customizations that you made when you created the AMI.
+See: [The Golden AMI Pipeline](https://aws.amazon.com/blogs/awsmarketplace/announcing-the-golden-ami-pipeline/)
 
-# Magento 2 Installation Automation (Centos 8.2, AWS linux with ARM support) GitHub reposetory:
+### With Packer
 
-[Magento installation Script] (https://github.com/Genaker/Magento-AWS-Linux-2-Instalation).
+[Packer](https://www.packer.io/) creates machine images for many platforms from a single JSON template.
 
-# Building an Golden AMI with Packer
+---
 
-Packer is an open-source tool by Hashicorp that automates the creation of machine images for different platforms. Developers specify the machine configuration using a JSON file called template, and then run Packer to build the image.
+## Magento Installation Automation
 
+Magento installation is handled in a separate repo:
+👉 [Magento installation script](https://github.com/Genaker/Magento-AWS-Linux-2-Instalation)
 
-One key feature of Packer is its capability to create images targeted to different platforms, all from the same specification. This is a nice feature that allows you to create machine images of different types without repetitive coding.
+---
 
-You can get Packer and its documentation at the [Packer official site](https://www.packer.io/).  
+## DynamoDB & Logging Integration
 
+Magento includes a PHP library for DynamoDB:
 
-# Use DynamoDb with Magento 2
-
-Magento out of the box has a PHP Library to work with Dynamo DB. 
-
-```
+```php
 use Aws\DynamoDb\Exception\DynamoDbException;
 use Aws\DynamoDb\Marshaler;
 
-$sdk = new Aws\Sdk([
-    'endpoint'   => 'http://localhost:8000',
-    'region'   => 'us-west-2',
-    'version'  => 'latest'
-]);
-
-$dynamodb = $sdk->createDynamoDb();
-$marshaler = new Marshaler();
-
-$tableName = 'Movies';
-
-$year = 2015;
-$title = 'The Big New Movie';
-
-$item = $marshaler->marshalJson('
-    {
-        "year": ' . $year . ',
-        "title": "' . $title . '",
-        "info": {
-            "plot": "Nothing happens at all.",
-            "rating": 0
-        }
-    }
-');
-
-$params = [
-    'TableName' => 'Movies',
-    'Item' => $item
-];
-
-try {
-    $result = $dynamodb->putItem($params);
-    echo "Added item: $year - $title\n";
-
-} catch (DynamoDbException $e) {
-    echo "Unable to add item:\n";
-    echo $e->getMessage() . "\n";
-}
-
-?>
+// ...
 ```
 
-You can record logs to a DynamoDB table with the AWS SDK and Monolog using /Monolog/Handler/DynamoDbHandler.php
+Use cases:
 
-When Time to Live (TTL) is enabled on a table in Amazon DynamoDB, a background job checks the TTL attribute of items to determine whether they are expired.
+* Store logs in DynamoDB via Monolog’s `DynamoDbHandler`
+* Leverage TTL to auto-clean log entries
+* Use [maxbanton/cwh](https://github.com/maxbanton/cwh) to send logs to **CloudWatch Logs**:
 
-Also you can use the Amazon Web Services CloudWatch Logs Handler for Monolog library to integrate Magento 2 Monolog with CloudWatch Logs (https://github.com/maxbanton/cwh).
-
-```
+```bash
 php composer.phar require maxbanton/cwh:^1.0
 ```
 
+---
 
-If you have any questions feel free to send me an email – yegorshytikov@gmail.com
+## Licensing & Credits
 
-Terraform AWS moules maintained by [Anton Babenko](https://github.com/antonbabenko)
+Terraform AWS modules by: [Anton Babenko](https://github.com/antonbabenko)
 
-All content, including [Terraform AWS modules](https://github.com/terraform-aws-modules/) used in these configurations, is released under the MIT License. 
+All content, including [Terraform AWS modules](https://github.com/terraform-aws-modules/), is released under the **MIT License**.
 
-# Good news for the Magento Terraform Community 
+---
 
-Terragrunt issue with use modules from Terraform Registry is resolved now we can use many other modules! 
-https://github.com/gruntwork-io/terragrunt/issues/311
+## Terragrunt + Terraform Registry
 
-Terragrunt 31.5 release: Added support for fetching modules from any Terraform Registry using the new tfr:// protocol syntax for the source attribute. See the updated docs on source for more details.
+Terragrunt’s issue with using modules from the Terraform Registry has been resolved:
+[https://github.com/gruntwork-io/terragrunt/issues/311](https://github.com/gruntwork-io/terragrunt/issues/311)
 
+Terragrunt `v0.31.5` adds support for fetching modules from *any* Terraform Registry via the `tfr://` protocol in `source`.
+
+---
