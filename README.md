@@ -1,4 +1,3 @@
-
 # Terraform Magento Cloud
 
 Infrastructure as Code for eCommerce Cloud Architecture on AWS  
@@ -208,7 +207,7 @@ Using **geolocation routing**, you can:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-````
+```
 
 Then:
 
@@ -227,9 +226,9 @@ brew install hello
 
 On macOS, install dependencies:
 
-````bash
+```bash
 brew install terraform terragrunt pre-commit
-``>
+```
 
 ---
 
@@ -702,3 +701,7 @@ Terragrunt’s issue with using modules from the Terraform Registry has been res
 Terragrunt `v0.31.5` adds support for fetching modules from *any* Terraform Registry via the `tfr://` protocol in `source`.
 
 ---
+
+```
+::contentReference[oaicite:0]{index=0}
+```
