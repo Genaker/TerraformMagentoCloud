@@ -1,4 +1,4 @@
-````markdown
+
 # Terraform Magento Cloud
 
 Infrastructure as Code for eCommerce Cloud Architecture on AWS  
@@ -257,7 +257,7 @@ chmod a+x /bin/terragrunt
 
 rm -rf /ci
 exit
-````
+```
 
 Test:
 
