@@ -6,10 +6,16 @@ on:
   pull_request:
     branches: [ main, master, develop ]
 
+# Set default permissions to read-only for security
+permissions:
+  contents: read
+
 jobs:
   terraform-checks:
     name: Terraform Validation and Formatting
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -34,6 +40,9 @@ jobs:
   security-scan:
     name: Security Scanning
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write  # Required for uploading SARIF results
     
     steps:
       - name: Checkout code
@@ -57,6 +66,8 @@ jobs:
   documentation:
     name: Documentation Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -86,6 +97,8 @@ jobs:
   localstack-test:
     name: LocalStack Integration Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
