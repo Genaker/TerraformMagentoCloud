@@ -83,6 +83,9 @@ inputs = {
 
   # Password for the master DB user. Note that this may show up in logs, and it will be stored in the state file
   # type: string
+  # ⚠️ SECURITY WARNING: This is a placeholder password for DEMO purposes only!
+  # NEVER use this password in production. See SECRETS_MANAGEMENT.md for proper secrets handling.
+  # Recommended: Use AWS Secrets Manager or AWS Systems Manager Parameter Store
   password = "CPqBueCwW6n7"
 
   # The port on which the DB accepts connections

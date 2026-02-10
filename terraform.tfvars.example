@@ -1,0 +1,55 @@
+# Terraform Variables Example
+# 
+# This file shows example variable definitions for the Magento Cloud infrastructure.
+# Copy this file to terraform.tfvars and customize with your values.
+# 
+# ⚠️ IMPORTANT: Never commit terraform.tfvars to version control!
+# The .gitignore file is configured to exclude *.tfvars files.
+
+# AWS Configuration
+# -----------------
+# aws_region = "ap-southeast-1"
+
+# Database Configuration
+# ----------------------
+# Generate a strong password using one of these methods:
+#   openssl rand -base64 32
+#   pwgen -s 32 1
+#   python3 -c "import secrets; print(secrets.token_urlsafe(32))"
+#
+# db_password = "your-strong-random-password-here"
+# db_username = "magento_admin"
+
+# Network Configuration
+# ---------------------
+# vpc_cidr = "10.0.0.0/16"
+
+# RDS Configuration
+# -----------------
+# db_instance_class = "db.m6g.2xlarge"
+# db_allocated_storage = 100
+# db_engine_version = "10.4.13"
+# db_multi_az = true
+# db_backup_retention_period = 7
+
+# ElastiCache Configuration
+# -------------------------
+# redis_node_type = "cache.t3.micro"
+# redis_num_cache_nodes = 1
+
+# Auto Scaling Configuration
+# ---------------------------
+# asg_min_size = 2
+# asg_max_size = 10
+# asg_desired_capacity = 2
+# ec2_instance_type = "t3.medium"
+
+# Tags
+# ----
+# Common tags to apply to all resources
+# tags = {
+#   Environment = "production"
+#   Project     = "magento-cloud"
+#   ManagedBy   = "terraform"
+#   Owner       = "platform-team"
+# }
