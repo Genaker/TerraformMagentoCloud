@@ -2,6 +2,31 @@
 
 This module contains data-sources which are used as arguments in other AWS modules (eg, list of AZ when creating VPC).
 
+## Purpose
+
+This is a foundational module that should be deployed first. It provides:
+- Current AWS region information
+- Available availability zones in the region  
+- Amazon Linux 2 AMI ID (ARM64 architecture for Graviton instances)
+
+## Usage in Other Modules
+
+Other modules depend on this module to get region and availability zone information:
+
+```hcl
+dependency "aws-data" {
+  config_path = "../aws-data"
+}
+
+inputs = {
+  availability_zones = dependency.aws-data.outputs.available_aws_availability_zones_names
+}
+```
+
+## Architecture Note
+
+The module fetches ARM64-based AMIs by default for cost efficiency with Amazon Graviton processors.
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 

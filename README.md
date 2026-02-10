@@ -72,6 +72,19 @@ aws secretsmanager create-secret \
 
 See [SECRETS_MANAGEMENT.md](SECRETS_MANAGEMENT.md) for complete guide.
 
+## Deployment Guide
+
+For detailed deployment instructions, including pre-deployment checklist, step-by-step guide, and troubleshooting, see:
+
+📖 **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete deployment guide
+
+Quick deployment:
+```bash
+cd magento-cloud-minimal/production
+terragrunt run-all plan    # Review what will be created
+terragrunt run-all apply   # Create infrastructure
+```
+
 ## Create and manage your infrastructure
 
 Infrastructure consists of multiple layers (magento_auto_scaling, mysql, load_balancer, ...) where each layer is described using one [Terraform module](https://www.terraform.io/docs/configuration/modules.html) with `inputs` arguments specified in `terragrunt.hcl` in respective layer's directory.
