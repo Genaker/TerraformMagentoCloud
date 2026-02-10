@@ -1,4 +1,11 @@
-# Minimal Magento Cloud Infrastructure 
+# Minimal Magento Cloud Infrastructure
+
+[![Terraform](https://img.shields.io/badge/Terraform-v1.13.4-623CE4?logo=terraform)](https://www.terraform.io/)
+[![Terragrunt](https://img.shields.io/badge/Terragrunt-v0.92.1-00ADD8)](https://terragrunt.gruntwork.io/)
+[![AWS](https://img.shields.io/badge/AWS-Provider%20v6.x-FF9900?logo=amazon-aws)](https://registry.terraform.io/providers/hashicorp/aws/latest)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+> **Production-ready Terraform infrastructure for deploying Magento on AWS using modern best practices** 
 
 ![Minimal Magento Cloud Infrastructure](https://user-images.githubusercontent.com/9213670/134857584-7771a2ec-73d1-45d0-858f-d628c13e21b9.png)
 
@@ -36,13 +43,34 @@ brew install terraform terragrunt pre-commit
 
 The recommended way to configure access credentials to AWS account is using environment variables:
 
-```
-$ export AWS_DEFAULT_REGION=ap-southeast-1
-$ export AWS_ACCESS_KEY_ID=...
-$ export AWS_SECRET_ACCESS_KEY=...
+```bash
+export AWS_DEFAULT_REGION=ap-southeast-1
+export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_ACCESS_KEY=...
 ```
 
 Alternatively, you can edit `terragrunt.hcl` and use another authentication mechanism as described in [AWS provider documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#authentication).
+
+## ⚠️ Security: Secrets Management
+
+**IMPORTANT:** The example configurations contain placeholder passwords for demonstration only. 
+
+Before deploying to production:
+1. **NEVER use hardcoded passwords** in configuration files
+2. Use **AWS Secrets Manager** or **AWS Systems Manager Parameter Store** to store sensitive data
+3. See [SECRETS_MANAGEMENT.md](SECRETS_MANAGEMENT.md) for detailed instructions
+4. Review [SECURITY.md](SECURITY.md) for security best practices
+
+**Quick Example:**
+```bash
+# Store password in AWS Secrets Manager
+aws secretsmanager create-secret \
+  --name magento/db/master-password \
+  --secret-string '{"password":"YOUR_STRONG_PASSWORD"}' \
+  --region ap-southeast-1
+```
+
+See [SECRETS_MANAGEMENT.md](SECRETS_MANAGEMENT.md) for complete guide.
 
 ## Create and manage your infrastructure
 
@@ -94,6 +122,42 @@ This infrastructure uses the latest stable versions:
 
 All module sources use **HTTPS URLs** (not SSH) for easier access without SSH keys.
 
+## Cost Estimation
+
+Before deploying, consider the AWS costs. This infrastructure creates:
+
+- **VPC**: Free tier eligible
+- **RDS (db.m6g.2xlarge)**: ~$400-500/month (consider smaller instances for dev/test)
+- **ElastiCache Redis**: Varies by node type
+- **EFS**: Pay per GB stored
+- **ALB**: ~$20-30/month + data transfer costs
+- **EC2 Auto Scaling**: Depends on instance type and count
+- **Data Transfer**: Varies by usage
+
+**Recommendation**: Start with smaller instance types for testing, then scale based on actual needs.
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+### Quick Contribution Guide
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-improvement`
+3. Make your changes following our [coding standards](CONTRIBUTING.md#coding-standards)
+4. Test your changes locally (preferably with LocalStack)
+5. Run security scans: `docker run --rm -v $(pwd):/src aquasec/tfsec /src`
+6. Submit a Pull Request
+
+## Security
+
+Security is a top priority. Please:
+
+- Review [SECURITY.md](SECURITY.md) for security policies
+- Never commit secrets or credentials
+- Report security vulnerabilities privately (see [SECURITY.md](SECURITY.md#reporting-security-vulnerabilities))
+- Use [SECRETS_MANAGEMENT.md](SECRETS_MANAGEMENT.md) for proper secrets handling
+
 ## References
 
 * [Terraform documentation](https://www.terraform.io/docs/) and [Terragrunt documentation](https://terragrunt.gruntwork.io/docs/) for all available commands and features
@@ -101,5 +165,22 @@ All module sources use **HTTPS URLs** (not SSH) for easier access without SSH ke
 * [Terraform modules registry](https://registry.terraform.io/)
 * [Terraform best practices](https://www.terraform-best-practices.com/)
 * [LocalStack for local testing](https://docs.localstack.cloud/)
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+- 📖 [Documentation](README_LOCAL.md) - Detailed local testing guide
+- 🐛 [Issue Tracker](https://github.com/Genaker/TerraformMagentoCloud/issues) - Report bugs or request features
+- 💬 [Discussions](https://github.com/Genaker/TerraformMagentoCloud/discussions) - Ask questions or share ideas
+
+## Acknowledgments
+
+Built with:
+- [Terraform](https://www.terraform.io/) by HashiCorp
+- [Terragrunt](https://terragrunt.gruntwork.io/) by Gruntwork
+- [AWS Terraform Modules](https://github.com/terraform-aws-modules/) by the community
 
 

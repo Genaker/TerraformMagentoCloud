@@ -1,0 +1,124 @@
+name: Terraform CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  terraform-checks:
+    name: Terraform Validation and Formatting
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.4
+
+      - name: Terraform Format Check
+        run: |
+          terraform fmt -check -recursive .
+        continue-on-error: true
+
+      - name: Validate Terraform modules
+        run: |
+          cd modules/aws-data
+          terraform init -backend=false
+          terraform validate
+
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          soft_fail: true
+          additional_args: --minimum-severity MEDIUM
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: .
+          framework: terraform
+          soft_fail: true
+          output_format: sarif
+          download_external_modules: false
+
+  documentation:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for SECURITY.md
+        run: |
+          if [ ! -f "SECURITY.md" ]; then
+            echo "SECURITY.md is missing"
+            exit 1
+          fi
+
+      - name: Check for CONTRIBUTING.md
+        run: |
+          if [ ! -f "CONTRIBUTING.md" ]; then
+            echo "CONTRIBUTING.md is missing"
+            exit 1
+          fi
+
+      - name: Check README
+        run: |
+          if [ ! -f "README.md" ]; then
+            echo "README.md is missing"
+            exit 1
+          fi
+
+  localstack-test:
+    name: LocalStack Integration Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Start LocalStack
+        run: |
+          docker run -d --name localstack \
+            -p 4566:4566 \
+            -e SERVICES=ec2,s3,rds,elasticache,efs \
+            localstack/localstack:latest
+          
+          # Wait for LocalStack to be ready
+          timeout 60 bash -c 'until docker logs localstack 2>&1 | grep -q "Ready"; do sleep 2; done'
+
+      - name: Run integration tests
+        run: |
+          cd tests
+          go mod download
+          
+          export LOCALSTACK_ENDPOINT=http://localhost:4566
+          export AWS_ACCESS_KEY_ID=test
+          export AWS_SECRET_ACCESS_KEY=test
+          export AWS_DEFAULT_REGION=ap-southeast-1
+          
+          go test -v -timeout 10m ./...
+        continue-on-error: true
+
+      - name: Stop LocalStack
+        if: always()
+        run: docker stop localstack || true
